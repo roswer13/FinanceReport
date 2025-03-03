@@ -12,6 +12,11 @@ appcompat = "1.6.1"
 material = "1.10.0"
 org-jetbrains-kotlin-android = "1.8.10"
 room = "2.6.1"
+hilt = "2.48"
+hilt-worker = "1.2.0"
+hilt-androidx = "1.2.0"
+hilt-navigation = "1.2.0"
+hilt-testing = "2.44"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +40,13 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+hilt-androidx-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt-androidx" }
+hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation" }
+hilt-worker = { module = "androidx.hilt:hilt-work", version.ref = "hilt-worker" }
+hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt-testing" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -42,4 +54,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 android-library = { id = "com.android.library", version.ref = "agp" }
 
 org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "org-jetbrains-kotlin-android" }
-
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
