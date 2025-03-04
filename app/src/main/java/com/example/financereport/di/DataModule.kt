@@ -4,8 +4,11 @@ import android.content.Context
 import androidx.room.Room
 import com.example.data.databese.AppDatabase
 import com.example.data.databese.dao.UserDao
+import com.example.data.onboarding.OnboardingLocalDataSource
+import com.example.data.onboarding.OnboardingRepositoryImpl
 import com.example.data.user.repository.UserLocalDataSource
 import com.example.data.userPreferences.repository.UserPreferencesRepositoryImpl
+import com.example.domain.module.onboarding.repository.OnboardingRepository
 import com.example.domain.module.userPreferences.repository.UserPreferencesRepository
 import dagger.Module
 import dagger.Provides
@@ -44,5 +47,13 @@ object DataModule {
     @Singleton
     fun provideUserPreferencesRepositoryImpl(context: Context): UserPreferencesRepository {
         return UserPreferencesRepositoryImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOnboardingRepositoryImpl(
+        context: Context
+    ): OnboardingRepository {
+        return OnboardingRepositoryImpl(context)
     }
 }

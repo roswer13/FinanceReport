@@ -1,28 +1,28 @@
 package com.example.financereport.presentation.onboarding.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.example.domain.module.onboarding.usecase.GetOnboardingUseCase
 import com.example.domain.module.userPreferences.usecase.GetOnboardingStatusUseCase
 import com.example.domain.module.userPreferences.usecase.SetOnboardingCompletedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     getOnboardingStatusUseCase: GetOnboardingStatusUseCase,
-    private val setOnboardingCompletedUseCase: SetOnboardingCompletedUseCase
+    private val setOnboardingCompletedUseCase: SetOnboardingCompletedUseCase,
+    private val getOnboardingUseCase: GetOnboardingUseCase
 ) : ViewModel() {
 
-    val isOnboardingCompleted: StateFlow<Boolean> =
-        getOnboardingStatusUseCase().stateIn(viewModelScope, SharingStarted.Lazily, false)
+    private val _uiState: MutableOnboardingUiState = MutableOnboardingUiState()
+    val uiState: OnboardingUiState = _uiState
 
-    fun completeOnboarding() {
-        viewModelScope.launch {
-            setOnboardingCompletedUseCase()
-        }
+    init {
+        getOnboardingPages()
+    }
+
+    private fun getOnboardingPages() {
+        _uiState.onboarding = getOnboardingUseCase("en")
+        _uiState.error = false
     }
 }

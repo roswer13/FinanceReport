@@ -1,5 +1,7 @@
 package com.example.financereport.di
 
+import com.example.domain.module.onboarding.repository.OnboardingRepository
+import com.example.domain.module.onboarding.usecase.GetOnboardingUseCase
 import com.example.domain.module.userPreferences.repository.UserPreferencesRepository
 import com.example.domain.module.userPreferences.usecase.GetOnboardingStatusUseCase
 import com.example.domain.module.userPreferences.usecase.SetOnboardingCompletedUseCase
@@ -23,5 +25,11 @@ object DomainModule {
     @Singleton
     fun provideSetOnboardingCompletedUseCase(repository: UserPreferencesRepository): SetOnboardingCompletedUseCase {
         return SetOnboardingCompletedUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetOnboardingUseCase(repository: OnboardingRepository): GetOnboardingUseCase {
+        return GetOnboardingUseCase(repository)
     }
 }
