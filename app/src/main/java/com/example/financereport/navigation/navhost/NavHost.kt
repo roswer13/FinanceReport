@@ -19,7 +19,11 @@ fun NavHost(
 ) {
     NavHost(navController = navController, startDestination = Navigation.Splash.destination) {
         composable(Navigation.Splash.destination) {
-            SplashScreen(onNavigate = { navController.navigate(Navigation.Onboarding.destination) })
+            SplashScreen(onNavigate = {
+                navController.navigate(Navigation.Onboarding.destination) {
+                    popUpTo(Navigation.Splash.destination) { inclusive = true }
+                }
+            })
         }
         mainNavigation(navController)
     }

@@ -25,6 +25,18 @@ class OnboardingRepositoryImpl @Inject constructor(
                 description = "2. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 uri = "https://fakeimg.pl/250",
             ),
+            Onboarding(
+                id = 3,
+                title = resources.getString(R.string.app_name),
+                description = "3. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                uri = "https://fakeimg.pl/250",
+            ),
+            Onboarding(
+                id = 4,
+                title = resources.getString(R.string.app_name),
+                description = "4. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                uri = "https://fakeimg.pl/250",
+            ),
         )
     }
 }
