@@ -2,12 +2,15 @@ package com.example.financereport.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.data.categories.repository.CategoryLocalDataSource
+import com.example.data.categories.repository.CategoryRepositoryImpl
 import com.example.data.databese.AppDatabase
+import com.example.data.databese.dao.CategoryDao
 import com.example.data.databese.dao.UserDao
-import com.example.data.onboarding.OnboardingLocalDataSource
 import com.example.data.onboarding.OnboardingRepositoryImpl
 import com.example.data.user.repository.UserLocalDataSource
 import com.example.data.userPreferences.repository.UserPreferencesRepositoryImpl
+import com.example.domain.module.categories.repository.CategoryRepository
 import com.example.domain.module.onboarding.repository.OnboardingRepository
 import com.example.domain.module.userPreferences.repository.UserPreferencesRepository
 import dagger.Module
@@ -25,9 +28,7 @@ object DataModule {
     @Provides
     fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
         return Room.databaseBuilder(
-            appContext,
-            AppDatabase::class.java,
-            "finance_report"
+            appContext, AppDatabase::class.java, "finance_report"
         ).fallbackToDestructiveMigration().build()
     }
 
@@ -35,6 +36,12 @@ object DataModule {
     @Provides
     fun providePetDao(db: AppDatabase): UserDao {
         return db.userDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCategoryDao(db: AppDatabase): CategoryDao {
+        return db.categoryDao()
     }
 
     @Provides
@@ -45,15 +52,27 @@ object DataModule {
 
     @Provides
     @Singleton
+    fun provideCategoryLocalDataSource(dao: CategoryDao): CategoryLocalDataSource {
+        return CategoryLocalDataSource(dao)
+    }
+
+    @Provides
+    @Singleton
     fun provideUserPreferencesRepositoryImpl(context: Context): UserPreferencesRepository {
         return UserPreferencesRepositoryImpl(context)
     }
 
     @Provides
     @Singleton
-    fun provideOnboardingRepositoryImpl(
-        context: Context
-    ): OnboardingRepository {
+    fun provideOnboardingRepositoryImpl(context: Context): OnboardingRepository {
         return OnboardingRepositoryImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoryRepositoryImpl(
+        context: Context, localDataSource: CategoryLocalDataSource
+    ): CategoryRepository {
+        return CategoryRepositoryImpl(context, localDataSource)
     }
 }

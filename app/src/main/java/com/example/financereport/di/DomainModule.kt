@@ -1,5 +1,7 @@
 package com.example.financereport.di
 
+import com.example.domain.module.categories.repository.CategoryRepository
+import com.example.domain.module.categories.usecase.CategoryUseCase
 import com.example.domain.module.onboarding.repository.OnboardingRepository
 import com.example.domain.module.onboarding.usecase.GetOnboardingUseCase
 import com.example.domain.module.userPreferences.repository.UserPreferencesRepository
@@ -31,5 +33,11 @@ object DomainModule {
     @Singleton
     fun provideGetOnboardingUseCase(repository: OnboardingRepository): GetOnboardingUseCase {
         return GetOnboardingUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoryUseCase(repository: CategoryRepository): CategoryUseCase {
+        return CategoryUseCase(repository)
     }
 }
