@@ -23,4 +23,3 @@ rootProject.name = "FinanceReport"
 include(":app")
 include(":domain")
 include(":data")
-include(":design-system")
