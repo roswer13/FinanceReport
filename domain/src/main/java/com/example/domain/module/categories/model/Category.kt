@@ -9,7 +9,7 @@ data class Category(
     companion object {
         fun buildFake() = Category(
             id = 1,
-            icon = R.drawable.currency_dollar,
+            icon = R.drawable.icon_test,
             name = "Supermarket",
             color = ColorUtils.generateRandomColorHex()
         )

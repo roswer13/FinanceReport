@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FinanceReport</string>
-    <string name="finance">FinanceReport</string>
+    <string name="payroll">Payroll</string>
+    <string name="transfer">Transfer</string>
+    <string name="rents">Rents and Rentals</string>
+    <string name="scholarships">Scholarships and Grants</string>
+    <string name="extraordinary_income">Extraordinary Income</string>
+    <string name="equity_income">Capital Gains</string>
+
+    <string name="cryptocurrencies">Cryptocurrencies</string>
+    <string name="stock_exchange">Stock Exchange</string>
+    <string name="savings">Savings</string>
 </resources>

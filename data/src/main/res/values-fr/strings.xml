@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rapport Financier</string>
+    <string name="payroll">Paie</string>
+    <string name="transfer">Virement</string>
+    <string name="rents">Loyers et Locations</string>
+    <string name="scholarships">Bourses et Subventions</string>
+    <string name="extraordinary_income">Revenu Extraordinaire</string>
+    <string name="equity_income">Gains en Capital</string>
+
+    <string name="cryptocurrencies">Cryptomonnaies</string>
+    <string name="stock_exchange">Bourse</string>
+    <string name="savings">Épargne</string>
+</resources>

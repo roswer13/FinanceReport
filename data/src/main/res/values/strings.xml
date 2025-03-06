@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FinanceReport</string>
-    <string name="finance">FinanceReport</string>
+    <string name="app_name">Finance Report</string>
+    <string name="payroll">Nómina</string>
+    <string name="transfer">Transferencia</string>
+    <string name="rents">Rentas y alquileres</string>
+    <string name="scholarships">Becas y subvenciones</string>
+    <string name="extraordinary_income">Ingresos extraordinarios</string>
+    <string name="equity_income">Ganancias Patrimoniales</string>
+
+    <string name="cryptocurrencies">Criptomonedas</string>
+    <string name="stock_exchange">Bolsa</string>
+    <string name="savings">Ahorros</string>
 </resources>
