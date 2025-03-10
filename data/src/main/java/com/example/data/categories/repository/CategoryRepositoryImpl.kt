@@ -15,7 +15,6 @@ class CategoryRepositoryImpl @Inject constructor(
 ) : CategoryRepository {
 
     override suspend fun getCategoryList(): List<Category> {
-
         // val categories = localDataSource.getAll().getOrThrow().map { it.toDomain() }
         localDataSource.insertOrUpdate(createCategoryList().map { it.toEntity() })
         return localDataSource.getAll().getOrThrow().map { it.toDomain() }
@@ -24,7 +23,6 @@ class CategoryRepositoryImpl @Inject constructor(
     private fun createCategoryList(): List<Category> {
         return getStaticCategories(resources = context.resources)
     }
-
     private fun getStaticCategories(resources: Resources): List<Category> {
         val categories = mutableListOf<Category>()
 

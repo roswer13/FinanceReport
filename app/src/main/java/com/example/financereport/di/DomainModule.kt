@@ -7,6 +7,8 @@ import com.example.domain.module.onboarding.usecase.GetOnboardingUseCase
 import com.example.domain.module.userPreferences.repository.UserPreferencesRepository
 import com.example.domain.module.userPreferences.usecase.GetOnboardingStatusUseCase
 import com.example.domain.module.userPreferences.usecase.SetOnboardingCompletedUseCase
+import com.example.domain.utils.AndroidLogger
+import com.example.domain.utils.Logger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +18,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DomainModule {
+
+    @Provides
+    @Singleton
+    fun provideLogger(): Logger = AndroidLogger()
 
     @Provides
     @Singleton

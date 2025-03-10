@@ -13,6 +13,7 @@ import com.example.data.userPreferences.repository.UserPreferencesRepositoryImpl
 import com.example.domain.module.categories.repository.CategoryRepository
 import com.example.domain.module.onboarding.repository.OnboardingRepository
 import com.example.domain.module.userPreferences.repository.UserPreferencesRepository
+import com.example.domain.utils.Logger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,8 +53,8 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideCategoryLocalDataSource(dao: CategoryDao): CategoryLocalDataSource {
-        return CategoryLocalDataSource(dao)
+    fun provideCategoryLocalDataSource(dao: CategoryDao, logger: Logger): CategoryLocalDataSource {
+        return CategoryLocalDataSource(dao, logger)
     }
 
     @Provides
