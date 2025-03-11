@@ -6,11 +6,15 @@ import com.example.data.categories.repository.CategoryLocalDataSource
 import com.example.data.categories.repository.CategoryRepositoryImpl
 import com.example.data.databese.AppDatabase
 import com.example.data.databese.dao.CategoryDao
+import com.example.data.databese.dao.FinanceDao
 import com.example.data.databese.dao.UserDao
+import com.example.data.finances.repository.FinanceLocalDataSource
+import com.example.data.finances.repository.FinanceRepositoryImpl
 import com.example.data.onboarding.OnboardingRepositoryImpl
 import com.example.data.user.repository.UserLocalDataSource
 import com.example.data.userPreferences.repository.UserPreferencesRepositoryImpl
 import com.example.domain.module.categories.repository.CategoryRepository
+import com.example.domain.module.finances.repository.FinanceRepository
 import com.example.domain.module.onboarding.repository.OnboardingRepository
 import com.example.domain.module.userPreferences.repository.UserPreferencesRepository
 import com.example.domain.utils.Logger
@@ -45,6 +49,12 @@ object DataModule {
         return db.categoryDao()
     }
 
+    @Singleton
+    @Provides
+    fun provideFinanceDao(db: AppDatabase): FinanceDao {
+        return db.financeDao()
+    }
+
     @Provides
     @Singleton
     fun provideUserLocalDataSource(dao: UserDao): UserLocalDataSource {
@@ -55,6 +65,12 @@ object DataModule {
     @Singleton
     fun provideCategoryLocalDataSource(dao: CategoryDao, logger: Logger): CategoryLocalDataSource {
         return CategoryLocalDataSource(dao, logger)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFinanceLocalDataSource(dao: FinanceDao, logger: Logger): FinanceLocalDataSource {
+        return FinanceLocalDataSource(dao, logger)
     }
 
     @Provides
@@ -75,5 +91,14 @@ object DataModule {
         context: Context, localDataSource: CategoryLocalDataSource
     ): CategoryRepository {
         return CategoryRepositoryImpl(context, localDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFinanceRepositoryImpl(
+        localDataSource: FinanceLocalDataSource,
+        categoryLocalDataSource: CategoryLocalDataSource
+    ): FinanceRepository {
+        return FinanceRepositoryImpl(localDataSource, categoryLocalDataSource)
     }
 }
