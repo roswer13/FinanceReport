@@ -26,5 +26,10 @@ class MutableHomeUiState : HomeUiState, Updatable {
             )
             error = false
         }
+
+        fun buildEmptyFake() = MutableHomeUiState().apply {
+            categories = listOf()
+            error = false
+        }
     }
 }
