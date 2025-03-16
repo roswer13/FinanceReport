@@ -10,7 +10,7 @@ class Finance(
     val category: Category,
     val type: FinanceTypes,
     val description: String? = "",
-    val creationDate: Date
+    val creationDate: Date = Date()
 ) {
     companion object {
         fun buildFake() = Finance(

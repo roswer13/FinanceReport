@@ -29,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.module.categories.model.Category
+import com.example.domain.module.finances.models.Finance
+import com.example.domain.module.finances.models.FinanceTypes
 import com.example.financereport.presentation.components.AmountInputField
 import com.example.financereport.presentation.components.CategoryItem
 import com.example.financereport.presentation.components.DatePickerModal
@@ -40,7 +42,7 @@ import java.util.Date
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddFinanceDialog(
-    isVisible: Boolean, categories: List<Category>, onDismiss: () -> Unit
+    isVisible: Boolean, categories: List<Category>, onDismiss: (Finance?) -> Unit
 ) {
     if (isVisible) {
         val sheetState = rememberModalBottomSheetState(
@@ -54,21 +56,23 @@ fun AddFinanceDialog(
         val amount = remember { mutableStateOf("0.00") }
         Log.i("AddFinanceDialog", "Amount: ${amount.value}")
         ModalBottomSheet(
-            onDismissRequest = { onDismiss() },
+            onDismissRequest = { onDismiss(null) },
             sheetState = sheetState,
             containerColor = Color.White,
             shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
         ) {
-            AddFinanceDialogContent(amount = amount, categories = categories)
+            AddFinanceDialogContent(amount = amount, categories = categories, onDismiss = onDismiss)
         }
     }
 }
 
 @Composable
-fun AddFinanceDialogContent(amount: MutableState<String>, categories: List<Category>) {
+fun AddFinanceDialogContent(
+    amount: MutableState<String>, categories: List<Category>, onDismiss: (Finance?) -> Unit
+) {
     val category = remember { mutableStateOf<Category?>(null) }
     val showDatePicker = remember { mutableStateOf(false) }
-    val dateLong = remember { mutableLongStateOf( System.currentTimeMillis()) }
+    val dateLong = remember { mutableLongStateOf(System.currentTimeMillis()) }
 
     Column(
         modifier = Modifier
@@ -132,17 +136,41 @@ fun AddFinanceDialogContent(amount: MutableState<String>, categories: List<Categ
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             KeyboardKey(label = "📅", color = Blue30, onClick = { showDatePicker.value = true })
-            KeyboardKey(label = "✔", color = Color.Black, textColor = Color.White, onClick = { })
+            KeyboardKey(label = "✔", color = Color.Black, textColor = Color.White, onClick = {
+                if (!validateValues(amount.value, category.value)) {
+                    Log.i("AddFinanceDialog", "Invalid values")
+                } else {
+                    onDismiss(generateFinance(amount.value, category.value!!, dateLong.longValue))
+                }
+            })
         }
         Spacer(modifier = Modifier.height(16.dp))
     }
 
     if (showDatePicker.value) {
         DatePickerModal(
-            onDateSelected = { it?.let { dateLong.longValue = it }},
+            onDateSelected = { it?.let { dateLong.longValue = it } },
             onDismiss = { showDatePicker.value = false },
             initialDateMillis = dateLong.longValue
         )
+    }
+}
+
+fun validateValues(amount: String, category: Category?): Boolean {
+    return amount.isNotEmpty() && category != null
+}
+
+fun generateFinance(amount: String, category: Category, date: Long): Finance? {
+    try {
+        return Finance(
+            amount = amount.toDouble(),
+            category = category,
+            date = Date(date),
+            type = FinanceTypes.EXPENSE
+        )
+    } catch (e: Exception) {
+        Log.e("AddFinanceDialog", "Error generating finance: ${e.message}")
+        return null
     }
 }
 
@@ -156,5 +184,5 @@ fun AddFinanceDialogPreview() {
         Category.buildFake(),
         Category.buildFake(),
     )
-    AddFinanceDialogContent(amount = amount, categories = categories)
+    AddFinanceDialogContent(amount = amount, categories = categories, onDismiss = { _ -> })
 }
