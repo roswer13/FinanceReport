@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.module.categories.model.Category
 import com.example.domain.module.finances.models.Finance
-import com.example.domain.module.finances.models.FinanceTypes
 import com.example.financereport.presentation.components.AmountInputField
 import com.example.financereport.presentation.components.CategoryItem
 import com.example.financereport.presentation.components.DatePickerModal
@@ -166,7 +165,6 @@ fun generateFinance(amount: String, category: Category, date: Long): Finance? {
             amount = amount.toDouble(),
             category = category,
             date = Date(date),
-            type = FinanceTypes.EXPENSE
         )
     } catch (e: Exception) {
         Log.e("AddFinanceDialog", "Error generating finance: ${e.message}")

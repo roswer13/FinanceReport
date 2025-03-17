@@ -86,6 +86,7 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
                                 Column(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
                                     Text(text = finance.amount.toString())
                                     Text(text = finance.category.name)
+                                    Text(text = finance.category.financeType.name)
                                     Text(text = finance.date.toString())
                                 }
                             }

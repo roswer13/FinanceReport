@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.module.categories.usecase.CategoryUseCase
+import com.example.domain.module.categories.usecase.FinanceTypesUseCase
 import com.example.domain.module.finances.models.Finance
 import com.example.domain.module.finances.usecase.FinanceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val categoriesUseCase: CategoryUseCase, private val financeUseCase: FinanceUseCase
+    private val financeTypesUseCase: FinanceTypesUseCase,
+    private val categoriesUseCase: CategoryUseCase,
+    private val financeUseCase: FinanceUseCase
 ) : ViewModel(), HomeUiAction {
 
     private val _channel = Channel<HomeUiEvent>()
@@ -30,7 +33,9 @@ class HomeViewModel @Inject constructor(
 
     private fun loadHome() {
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.categories = categoriesUseCase()
+            financeTypesUseCase.getFinancesTypes()
+
+            _uiState.categories = categoriesUseCase.getCategoryList()
             _uiState.finances = financeUseCase.getFinancesList()
             _uiState.error = false
         }

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Rapport Financier</string>
+
+    <string name="income">Revenu</string>
+    <string name="expense">Dépenses</string>
+    <string name="saving">Épargne</string>
+
     <string name="payroll">Paie</string>
     <string name="transfer">Virement</string>
     <string name="rents">Loyers et Locations</string>

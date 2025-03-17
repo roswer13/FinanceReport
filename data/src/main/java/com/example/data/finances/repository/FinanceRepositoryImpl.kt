@@ -2,6 +2,7 @@ package com.example.data.finances.repository
 
 import com.example.data.categories.mapper.toDomain
 import com.example.data.categories.repository.CategoryLocalDataSource
+import com.example.data.categories.repository.FinanceTypesLocalDataSource
 import com.example.data.finances.mapper.toDomain
 import com.example.data.finances.mapper.toEntity
 import com.example.domain.module.finances.models.Finance
@@ -10,11 +11,14 @@ import javax.inject.Inject
 
 class FinanceRepositoryImpl @Inject constructor(
     private val localDataSource: FinanceLocalDataSource,
+    private val financeTypesLocalDataSource: FinanceTypesLocalDataSource,
     private val categoryLocalDataSource: CategoryLocalDataSource
 ) : FinanceRepository {
 
     override suspend fun getFinancesList(): List<Finance> {
-        val categories = categoryLocalDataSource.getAll().getOrThrow().map { it.toDomain() }
+        val financesTypes = financeTypesLocalDataSource.getAll().getOrThrow().map { it.toDomain() }
+        val categories = categoryLocalDataSource.getAll().getOrThrow()
+            .map { it.toDomain(financesTypes.find { financesType -> it.financeTypeId == financesType.id }!!) }
         return localDataSource.getAll().getOrThrow().map {
             it.toDomain(category = categories.find { category -> category.id == it.categoryId }
                 ?: throw Exception("Category not found"))
@@ -22,7 +26,9 @@ class FinanceRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getFinanceById(id: Int): Finance {
-        val categories = categoryLocalDataSource.getAll().getOrThrow().map { it.toDomain() }
+        val financesTypes = financeTypesLocalDataSource.getAll().getOrThrow().map { it.toDomain() }
+        val categories = categoryLocalDataSource.getAll().getOrThrow()
+            .map { it.toDomain(financesTypes.find { financesType -> it.financeTypeId == financesType.id }!!) }
         val financeEntity = localDataSource.getById(id = id).getOrThrow()
         return financeEntity.toDomain(category = categories.find { category -> category.id == financeEntity.categoryId }
             ?: throw Exception("Category not found"))
