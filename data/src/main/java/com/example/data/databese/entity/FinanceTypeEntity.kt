@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "finance_type")
 class FinanceTypeEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "name") val name: String
 )

@@ -7,7 +7,7 @@ data class FinanceTypes(
     companion object {
         fun buildFake() = FinanceTypes(
             id = 1,
-            name = "Income",
+            name = "Income"
         )
     }
 }
