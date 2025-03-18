@@ -2,15 +2,23 @@ package com.example.data.categories.repository
 
 import android.content.Context
 import android.content.res.Resources
+import com.example.data.categories.mapper.toDomain
+import com.example.data.categories.repository.FinanceTypesRepositoryImplTest.Companion
 import com.example.data.databese.dao.CategoryDao
+import com.example.data.databese.dao.FinanceTypeDao
 import com.example.data.databese.entity.CategoryEntity
+import com.example.data.databese.entity.FinanceTypeEntity
+import com.example.domain.module.categories.model.Category
+import com.example.domain.module.categories.model.FinanceTypes
 import com.example.domain.utils.Logger
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.unmockkAll
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertThrows
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,16 +26,14 @@ import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
 class CategoryRepositoryImplTest {
-    private lateinit var categoryRepository: CategoryRepositoryImpl
-    private lateinit var localDataSource: CategoryLocalDataSource
-    private lateinit var categoryDao: CategoryDao
-    private lateinit var logger: Logger
+    private lateinit var repository: CategoryRepositoryImpl
     private lateinit var context: Context
+    private lateinit var resources: Resources
+    private lateinit var financeTypesLocalDataSource: FinanceTypesLocalDataSource
+    private lateinit var categoryLocalDataSource: CategoryLocalDataSource
 
     @Before
     fun setUp() {
-        categoryDao = mockk()
-        logger = mockk(relaxed = true)
         context = mockk {
             val resourcesMock = mockk<Resources> {
                 every { getString(any()) } returns "Mocked String"
@@ -35,42 +41,57 @@ class CategoryRepositoryImplTest {
             }
             every { resources } returns resourcesMock
         }
-        localDataSource = CategoryLocalDataSource(categoryDao, logger)
-        categoryRepository = CategoryRepositoryImpl(context, localDataSource)
+
+        financeTypesLocalDataSource = mockk()
+        categoryLocalDataSource = mockk()
+
+        repository = CategoryRepositoryImpl(
+            context = context,
+            financeTypesLocalDataSource = financeTypesLocalDataSource,
+            localDataSource = categoryLocalDataSource
+        )
     }
 
     @Test
-    fun `getCategoryList should return list of categories`() = runBlocking {
-        coEvery { localDataSource.getAll() } returns Result.success(listOf(category1, category2))
-        coEvery { localDataSource.insertOrUpdate(any()) } returns Result.success(Unit)
+    fun `getCategoryList returns categories mapped from data source`() = runBlocking {
+        // Arrange
+        val incomeType = FinanceTypes(id = 1, name = "Income")
+        val expenseType = FinanceTypes(id = 2, name = "Expense")
+        val savingType = FinanceTypes(id = 3, name = "Saving")
+        val financeTypes = listOf(incomeType, expenseType, savingType)
 
-        val result = categoryRepository.getCategoryList()
+        val financeTypeEntities = financeTypes.map {
+            FinanceTypeEntity(id = it.id, name = it.name)
+        }
 
-        coVerify { localDataSource.insertOrUpdate(any()) }
-        coVerify { localDataSource.getAll() }
-        assert(result.size == 2)
-        assert(result[0].id == 1)
-        assert(result[1].id == 2)
+        val categoryEntities = listOf(
+            CategoryEntity(
+                id = 1, icon = 123, name = "Category 1", color = "#FFFFFF", financeTypeId = 1
+            ), CategoryEntity(
+                id = 2, icon = 124, name = "Category 2", color = "#FFFFFF", financeTypeId = 2
+            )
+        )
+
+        // Mock data source responses
+        coEvery { financeTypesLocalDataSource.getAll() } returns Result.success(financeTypeEntities)
+        coEvery { categoryLocalDataSource.insertOrUpdate(any()) } returns Result.success(Unit)
+        coEvery { categoryLocalDataSource.getAll() } returns Result.success(categoryEntities)
+
+        // Act
+        val result = repository.getCategoryList()
+
+        // Assert
+        assertEquals(2, result.size)
+        assertEquals("Category 1", result[0].name)
+        assertEquals("Category 2", result[1].name)
+
+        coVerify(exactly = 1) { financeTypesLocalDataSource.getAll() }
+        coVerify(exactly = 1) { categoryLocalDataSource.insertOrUpdate(any()) }
+        coVerify(exactly = 1) { categoryLocalDataSource.getAll() }
     }
 
-    @Test
-    fun `getCategoryList should return empty list when no categories`() = runBlocking {
-        coEvery { localDataSource.getAll() } returns Result.success(emptyList())
-        coEvery { localDataSource.insertOrUpdate(any()) } returns Result.success(Unit)
-
-        val result = categoryRepository.getCategoryList()
-
-        coVerify { localDataSource.insertOrUpdate(any()) }
-        coVerify { localDataSource.getAll() }
-        assert(result.isEmpty())
-    }
-
-    companion object {
-        val category1 = CategoryEntity(
-            id = 1, icon = 1, name = "Category 1", color = "#FFFFFF"
-        )
-        val category2 = CategoryEntity(
-            id = 2, icon = 1, name = "Category 2", color = "#FFFFFF"
-        )
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 }

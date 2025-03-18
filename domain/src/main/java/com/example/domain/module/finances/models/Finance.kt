@@ -8,7 +8,6 @@ class Finance(
     val date: Date,
     val amount: Double,
     val category: Category,
-    val type: FinanceTypes,
     val description: String? = "",
     val creationDate: Date = Date()
 ) {
@@ -18,7 +17,6 @@ class Finance(
             date = Date(),
             amount = 100.0,
             category = Category.buildFake(),
-            type = FinanceTypes.INCOME,
             description = "Description of the finance",
             creationDate = Date()
         )

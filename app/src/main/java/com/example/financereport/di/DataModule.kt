@@ -4,16 +4,21 @@ import android.content.Context
 import androidx.room.Room
 import com.example.data.categories.repository.CategoryLocalDataSource
 import com.example.data.categories.repository.CategoryRepositoryImpl
+import com.example.data.categories.repository.FinanceTypesLocalDataSource
+import com.example.data.categories.repository.FinanceTypesRepositoryImpl
 import com.example.data.databese.AppDatabase
 import com.example.data.databese.dao.CategoryDao
 import com.example.data.databese.dao.FinanceDao
+import com.example.data.databese.dao.FinanceTypeDao
 import com.example.data.databese.dao.UserDao
 import com.example.data.finances.repository.FinanceLocalDataSource
 import com.example.data.finances.repository.FinanceRepositoryImpl
 import com.example.data.onboarding.OnboardingRepositoryImpl
 import com.example.data.user.repository.UserLocalDataSource
 import com.example.data.userPreferences.repository.UserPreferencesRepositoryImpl
+import com.example.domain.module.categories.model.FinanceTypes
 import com.example.domain.module.categories.repository.CategoryRepository
+import com.example.domain.module.categories.repository.FinanceTypesRepository
 import com.example.domain.module.finances.repository.FinanceRepository
 import com.example.domain.module.onboarding.repository.OnboardingRepository
 import com.example.domain.module.userPreferences.repository.UserPreferencesRepository
@@ -39,7 +44,7 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun providePetDao(db: AppDatabase): UserDao {
+    fun provideUserDao(db: AppDatabase): UserDao {
         return db.userDao()
     }
 
@@ -47,6 +52,12 @@ object DataModule {
     @Provides
     fun provideCategoryDao(db: AppDatabase): CategoryDao {
         return db.categoryDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFinanceTypeDao(db: AppDatabase): FinanceTypeDao {
+        return db.financeTypeDao()
     }
 
     @Singleton
@@ -63,8 +74,18 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideCategoryLocalDataSource(dao: CategoryDao, logger: Logger): CategoryLocalDataSource {
+    fun provideCategoryLocalDataSource(
+        dao: CategoryDao, logger: Logger
+    ): CategoryLocalDataSource {
         return CategoryLocalDataSource(dao, logger)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFinanceTypesLocalDataSource(
+        dao: FinanceTypeDao, logger: Logger
+    ): FinanceTypesLocalDataSource {
+        return FinanceTypesLocalDataSource(dao, logger)
     }
 
     @Provides
@@ -88,17 +109,30 @@ object DataModule {
     @Provides
     @Singleton
     fun provideCategoryRepositoryImpl(
-        context: Context, localDataSource: CategoryLocalDataSource
+        context: Context,
+        financeTypesLocalDataSource: FinanceTypesLocalDataSource,
+        localDataSource: CategoryLocalDataSource
     ): CategoryRepository {
-        return CategoryRepositoryImpl(context, localDataSource)
+        return CategoryRepositoryImpl(context, financeTypesLocalDataSource, localDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFinanceTypesRepositoryImpl(
+        context: Context, localDataSource: FinanceTypesLocalDataSource
+    ): FinanceTypesRepository {
+        return FinanceTypesRepositoryImpl(context, localDataSource)
     }
 
     @Provides
     @Singleton
     fun provideFinanceRepositoryImpl(
         localDataSource: FinanceLocalDataSource,
+        financeTypesLocalDataSource: FinanceTypesLocalDataSource,
         categoryLocalDataSource: CategoryLocalDataSource
     ): FinanceRepository {
-        return FinanceRepositoryImpl(localDataSource, categoryLocalDataSource)
+        return FinanceRepositoryImpl(
+            localDataSource, financeTypesLocalDataSource, categoryLocalDataSource
+        )
     }
 }

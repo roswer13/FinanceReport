@@ -2,6 +2,7 @@ package com.example.data.categories.repository
 
 import com.example.data.databese.dao.CategoryDao
 import com.example.data.databese.entity.CategoryEntity
+import com.example.data.databese.entity.FinanceTypeEntity
 import com.example.domain.utils.Logger
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -115,11 +116,26 @@ class CategoryLocalDataSourceTest {
     }
 
     companion object {
+        val financeType1 = FinanceTypeEntity(
+            id = 1, name = "Finance Type 1"
+        )
+        val financeType2 = FinanceTypeEntity(
+            id = 2, name = "Finance Type 2"
+        )
+
         val category1 = CategoryEntity(
-            id = 1, icon = 1, name = "Category 1", color = "#FFFFFF"
+            id = 1,
+            icon = 1,
+            name = "Category 1",
+            color = "#FFFFFF",
+            financeTypeId = financeType1.id
         )
         val category2 = CategoryEntity(
-            id = 2, icon = 1, name = "Category 2", color = "#FFFFFF"
+            id = 2,
+            icon = 1,
+            name = "Category 2",
+            color = "#FFFFFF",
+            financeTypeId = financeType2.id
         )
     }
 }

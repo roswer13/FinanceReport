@@ -7,5 +7,8 @@ import javax.inject.Inject
 class CategoryUseCase @Inject constructor(
     private val repository: CategoryRepository
 ) {
-    suspend operator fun invoke(): List<Category> = repository.getCategoryList()
+    /**
+     * Get the list of categories.
+     */
+    suspend fun getCategoryList(): List<Category> = repository.getCategoryList()
 }
