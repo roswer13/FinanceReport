@@ -55,7 +55,6 @@ fun AddFinanceDialog(
         ModalBottomSheet(
             onDismissRequest = { onDismiss(null) },
             sheetState = sheetState,
-            containerColor = Color.White,
             shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
         ) {
             AddFinanceDialogContent(
@@ -106,13 +105,9 @@ fun AddFinanceDialogContent(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = category.value.name, fontSize = 16.sp, color = Color.Gray
-        )
+        Text(text = category.value.name, fontSize = 16.sp )
         AmountInputField(value = amount.value)
-        Text(
-            text = "${Date(dateLong.longValue)}", fontSize = 16.sp, color = Color.Gray
-        )
+        Text(text = "${Date(dateLong.longValue)}", fontSize = 16.sp)
         TextField(value = "",
             onValueChange = {},
             placeholder = { Text("Add comment...") },
@@ -150,8 +145,8 @@ fun AddFinanceDialogContent(
         Row(
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            KeyboardKey(label = "📅", color = Blue30, onClick = { showDatePicker.value = true })
-            KeyboardKey(label = "✔", color = Color.Black, textColor = Color.White, onClick = {
+            KeyboardKey(label = "📅", onClick = { showDatePicker.value = true })
+            KeyboardKey(label = "✔", onClick = {
                 if (!validateValues(amount.value, category.value)) {
                     Log.i("AddFinanceDialog", "Invalid values")
                 } else {

@@ -32,7 +32,7 @@ fun NavHost(
 private fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
     navigation(startDestination = Navigation.Home.destination, route = Route.Main.destination) {
         composable(Navigation.Home.destination) {
-            HomeScreen(navController = navController)
+            HomeScreen()
         }
         composable(Navigation.Onboarding.destination) {
             OnboardingScreen(navController = navController)

@@ -1,5 +1,6 @@
 package com.example.financereport.presentation.home
 
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -108,24 +108,18 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
 
 @Composable
 fun FinanceScreen(
-    viewModel: HomeUiAction,
-    categories: List<Category>,
-    financeTypes: List<FinanceTypes>
+    viewModel: HomeUiAction, categories: List<Category>, financeTypes: List<FinanceTypes>
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
-        FloatingActionButton(
-            onClick = { showDialog = true }, containerColor = Color.LightGray
-        ) {
+        FloatingActionButton(onClick = { showDialog = true }) {
             Icon(Icons.Default.Add, contentDescription = "Add Finance")
         }
     }
 
     AddFinanceDialog(
-        isVisible = showDialog,
-        categories = categories,
-        financeTypes = financeTypes
+        isVisible = showDialog, categories = categories, financeTypes = financeTypes
     ) { finance ->
         Log.i("HomeScreen", "Finance: $finance")
         showDialog = false
@@ -136,6 +130,15 @@ fun FinanceScreen(
 @Preview(name = "Home Screen")
 @Composable
 fun HomeScreenPreview() {
+    HomeScreen(viewModel = HomeUiAction.buildFake(), uiState = MutableHomeUiState.buildFake())
+}
+
+@Preview(
+    name = "Home Screen",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
+@Composable
+fun HomeScreenDarkPreview() {
     HomeScreen(viewModel = HomeUiAction.buildFake(), uiState = MutableHomeUiState.buildFake())
 }
 
