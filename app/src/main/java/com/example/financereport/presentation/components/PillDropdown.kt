@@ -1,5 +1,6 @@
 package com.example.financereport.presentation.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,7 +40,7 @@ fun PillDropdown(
     selectedItem: String,
     onItemSelected: (String) -> Unit,
     icon: Int? = null,
-    backgroundColor: String? = "#F5F5F5"
+    backgroundColor: String? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -45,10 +48,12 @@ fun PillDropdown(
         Surface(modifier = Modifier
             .menuAnchor()
             .clip(RoundedCornerShape(50))
-            .background(backgroundColor?.toColorInt()?.let { Color(it) } ?: Color.LightGray)
-            .clickable { expanded = true  }
+            .background(backgroundColor?.toColorInt()?.let { Color(it) }
+                ?: MaterialTheme.colorScheme.surfaceVariant)
+            .clickable { expanded = true }
             .padding(horizontal = 8.dp),
-            color = backgroundColor?.toColorInt()?.let { Color(it) } ?: Color.LightGray) {
+            color = backgroundColor?.toColorInt()?.let { Color(it) }
+                ?: MaterialTheme.colorScheme.surfaceVariant) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -60,7 +65,7 @@ fun PillDropdown(
                         modifier = Modifier
                             .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
                             .size(25.dp),
-                        tint = Color.Black
+                        tint = Color.DarkGray
                     )
                 } else {
                     Box(
@@ -69,12 +74,21 @@ fun PillDropdown(
                             .size(height = 25.dp, width = 1.dp),
                     )
                 }
-                Text(text = selectedItem, color = Color.Black)
-                Icon(
-                    imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = null,
-                    tint = Color.Black
-                )
+                // Validate of background color.
+                if (backgroundColor == null) {
+                    Text(text = selectedItem)
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = null
+                    )
+                } else {
+                    Text(text = selectedItem, color = Color.DarkGray)
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = null,
+                        tint = Color.DarkGray
+                    )
+                }
             }
         }
 
@@ -89,7 +103,12 @@ fun PillDropdown(
     }
 }
 
-@Preview
+@Preview(
+    locale = "fr-rFR", uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Pill Dropdown dark"
+)
+@Preview(
+    locale = "en-rEN", uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Pill Dropdown light"
+)
 @Composable
 fun PillDropdownPreview() {
     PillDropdown(

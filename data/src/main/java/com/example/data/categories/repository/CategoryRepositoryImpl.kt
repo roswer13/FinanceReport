@@ -67,7 +67,7 @@ class CategoryRepositoryImpl @Inject constructor(
                 3,
                 R.drawable.rents,
                 resources.getString(R.string.rents),
-                getColorHex(context, R.color.mint),
+                getColorHex(context, R.color.green),
                 income
             )
         )
@@ -76,7 +76,7 @@ class CategoryRepositoryImpl @Inject constructor(
                 4,
                 R.drawable.income,
                 resources.getString(R.string.scholarships),
-                getColorHex(context, R.color.coral),
+                getColorHex(context, R.color.orange),
                 income
             )
         )
@@ -105,7 +105,7 @@ class CategoryRepositoryImpl @Inject constructor(
                 7,
                 R.drawable.cryptocurrencies,
                 resources.getString(R.string.cryptocurrencies),
-                getColorHex(context, R.color.coral),
+                getColorHex(context, R.color.orange),
                 saving
             )
         )

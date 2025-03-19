@@ -35,7 +35,6 @@ import com.example.financereport.presentation.components.DatePickerModal
 import com.example.financereport.presentation.components.KeyboardKey
 import com.example.financereport.presentation.components.NumericKeyboard
 import com.example.financereport.presentation.components.PillDropdown
-import com.example.financereport.ui.theme.Blue30
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
