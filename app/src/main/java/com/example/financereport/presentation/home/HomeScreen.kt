@@ -27,8 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.example.domain.module.categories.model.Category
+import com.example.domain.module.categories.model.FinanceTypes
 import com.example.financereport.presentation.components.AppTopBar
 import com.example.financereport.presentation.dialogs.AddFinanceDialog
 import com.example.financereport.presentation.home.viewmodel.HomeUiAction
@@ -38,7 +38,7 @@ import com.example.financereport.presentation.home.viewmodel.HomeViewModel
 import com.example.financereport.presentation.home.viewmodel.MutableHomeUiState
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavHostController) {
+fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
     LaunchedEffect(Unit) {
         viewModel.channel.collect { event ->
@@ -55,7 +55,6 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavHos
 
 @Composable
 fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
-    val categories = uiState.categories
     val finances = uiState.finances
     Scaffold(topBar = { AppTopBar(title = "Home") }) { paddingValues ->
         Box(
@@ -83,7 +82,11 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
                         items(finances.size) { index ->
                             val finance = finances[index]
                             Card {
-                                Column(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+                                Column(
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .fillMaxWidth()
+                                ) {
                                     Text(text = finance.amount.toString())
                                     Text(text = finance.category.name)
                                     Text(text = finance.category.financeType.name)
@@ -94,13 +97,21 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
                     }
                 }
             }
-            FinanceScreen(viewModel = viewModel, categories = categories)
+            FinanceScreen(
+                viewModel = viewModel,
+                categories = uiState.categories,
+                financeTypes = uiState.financeTypes
+            )
         }
     }
 }
 
 @Composable
-fun FinanceScreen(viewModel: HomeUiAction, categories: List<Category>) {
+fun FinanceScreen(
+    viewModel: HomeUiAction,
+    categories: List<Category>,
+    financeTypes: List<FinanceTypes>
+) {
     var showDialog by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
@@ -111,7 +122,11 @@ fun FinanceScreen(viewModel: HomeUiAction, categories: List<Category>) {
         }
     }
 
-    AddFinanceDialog(isVisible = showDialog, categories = categories) { finance ->
+    AddFinanceDialog(
+        isVisible = showDialog,
+        categories = categories,
+        financeTypes = financeTypes
+    ) { finance ->
         Log.i("HomeScreen", "Finance: $finance")
         showDialog = false
         if (finance != null) viewModel.onCreateFinance(finance = finance)
