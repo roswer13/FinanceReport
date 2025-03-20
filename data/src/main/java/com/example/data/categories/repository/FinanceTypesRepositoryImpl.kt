@@ -7,6 +7,7 @@ import com.example.data.categories.mapper.toDomain
 import com.example.data.categories.mapper.toEntity
 import com.example.domain.module.categories.model.FinanceTypes
 import com.example.domain.module.categories.repository.FinanceTypesRepository
+import com.example.domain.utils.ColorUtils.getColorHex
 import javax.inject.Inject
 
 class FinanceTypesRepositoryImpl @Inject constructor(
@@ -29,9 +30,30 @@ class FinanceTypesRepositoryImpl @Inject constructor(
     private fun getStaticFinanceTypes(resources: Resources): List<FinanceTypes> {
         val finances = mutableListOf<FinanceTypes>()
 
-        finances.add(FinanceTypes(id = incomeId, name = resources.getString(R.string.income)))
-        finances.add(FinanceTypes(id = expenseId, name = resources.getString(R.string.expense)))
-        finances.add(FinanceTypes(id = savingId, name = resources.getString(R.string.saving)))
+        finances.add(
+            FinanceTypes(
+                id = incomeId,
+                name = resources.getString(R.string.income),
+                icon = R.drawable.income,
+                color = getColorHex(context, R.color.green)
+            )
+        )
+        finances.add(
+            FinanceTypes(
+                id = expenseId,
+                name = resources.getString(R.string.expense),
+                icon = R.drawable.expense,
+                color = getColorHex(context, R.color.lavender)
+            )
+        )
+        finances.add(
+            FinanceTypes(
+                id = savingId,
+                name = resources.getString(R.string.saving),
+                icon = R.drawable.savings,
+                color = getColorHex(context, R.color.blue)
+            )
+        )
 
         return finances
     }

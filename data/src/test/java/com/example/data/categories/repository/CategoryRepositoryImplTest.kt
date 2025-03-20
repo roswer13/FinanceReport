@@ -55,13 +55,13 @@ class CategoryRepositoryImplTest {
     @Test
     fun `getCategoryList returns categories mapped from data source`() = runBlocking {
         // Arrange
-        val incomeType = FinanceTypes(id = 1, name = "Income")
-        val expenseType = FinanceTypes(id = 2, name = "Expense")
-        val savingType = FinanceTypes(id = 3, name = "Saving")
+        val incomeType = FinanceTypes(id = 1, name = "Income", icon = 123, color = "#FFFFFF")
+        val expenseType = FinanceTypes(id = 2, name = "Expense", icon = 124, color = "#FFFFFF")
+        val savingType = FinanceTypes(id = 3, name = "Saving", icon = 125, color = "#FFFFFF")
         val financeTypes = listOf(incomeType, expenseType, savingType)
 
         val financeTypeEntities = financeTypes.map {
-            FinanceTypeEntity(id = it.id, name = it.name)
+            FinanceTypeEntity(id = it.id, name = it.name, icon = it.icon, color = it.color)
         }
 
         val categoryEntities = listOf(
