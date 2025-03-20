@@ -11,12 +11,20 @@ data class Category(
     val financeType: FinanceTypes
 ) {
     companion object {
-        fun buildFake() = Category(
+        fun buildIncomeFake() = Category(
             id = 1,
             icon = R.drawable.icon_test,
-            name = "Supermarket",
+            name = "Income",
             color = ColorUtils.generateRandomColorHex(),
-            financeType = FinanceTypes.buildFake()
+            financeType = FinanceTypes.buildIncomeFake()
+        )
+
+        fun buildSavingFake() = Category(
+            id = 1,
+            icon = R.drawable.icon_test,
+            name = "Savings",
+            color = ColorUtils.generateRandomColorHex(),
+            financeType = FinanceTypes.buildSavingFake()
         )
 
         fun buildFakeByFinanceType(financeType: FinanceTypes) = Category(

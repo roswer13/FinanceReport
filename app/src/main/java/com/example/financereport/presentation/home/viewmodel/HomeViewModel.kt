@@ -46,7 +46,10 @@ class HomeViewModel @Inject constructor(
 
                 _uiState.financeTypes = financeTypes
                 _uiState.categories = categoriesUseCase.getCategoryList()
-                _uiState.finances = financeUseCase.getFinancesList()
+                _uiState.finances = financeUseCase.getFinancesListByMonthYear(
+                    month = _uiState.month,
+                    year = _uiState.year
+                )
                 _uiState.error = false
             }
         } catch (e: Exception) {
@@ -63,6 +66,20 @@ class HomeViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             logger.logError(tag, "Error creating finance: ${e.message}")
+        }
+    }
+
+    override fun findFinancesByMonthAndYear(month: Int, year: Int) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                _uiState.finances = financeUseCase.getFinancesListByMonthYear(
+                    month = month,
+                    year = year
+                )
+            }
+        } catch (e: Exception) {
+            logger.logError(tag, "Error loading home: ${e.message}")
+            _uiState.error = true
         }
     }
 }

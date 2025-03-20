@@ -25,6 +25,16 @@ class FinanceRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getFinancesListByMonthYear(month: Int, year: Int): List<Finance> {
+        val financesTypes = financeTypesLocalDataSource.getAll().getOrThrow().map { it.toDomain() }
+        val categories = categoryLocalDataSource.getAll().getOrThrow()
+            .map { it.toDomain(financesTypes.find { financesType -> it.financeTypeId == financesType.id }!!) }
+        return localDataSource.getByMonthYear(month = month, year = year).getOrThrow().map {
+            it.toDomain(category = categories.find { category -> category.id == it.categoryId }
+                ?: throw Exception("Category not found"))
+        }
+    }
+
     override suspend fun getFinanceById(id: Int): Finance {
         val financesTypes = financeTypesLocalDataSource.getAll().getOrThrow().map { it.toDomain() }
         val categories = categoryLocalDataSource.getAll().getOrThrow()

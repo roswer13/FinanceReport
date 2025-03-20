@@ -35,7 +35,6 @@ import com.example.financereport.presentation.components.DatePickerModal
 import com.example.financereport.presentation.components.KeyboardKey
 import com.example.financereport.presentation.components.NumericKeyboard
 import com.example.financereport.presentation.components.PillDropdown
-import com.example.financereport.ui.theme.Blue30
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,7 +54,6 @@ fun AddFinanceDialog(
         ModalBottomSheet(
             onDismissRequest = { onDismiss(null) },
             sheetState = sheetState,
-            containerColor = Color.White,
             shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
         ) {
             AddFinanceDialogContent(
@@ -106,13 +104,9 @@ fun AddFinanceDialogContent(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = category.value.name, fontSize = 16.sp, color = Color.Gray
-        )
+        Text(text = category.value.name, fontSize = 16.sp )
         AmountInputField(value = amount.value)
-        Text(
-            text = "${Date(dateLong.longValue)}", fontSize = 16.sp, color = Color.Gray
-        )
+        Text(text = "${Date(dateLong.longValue)}", fontSize = 16.sp)
         TextField(value = "",
             onValueChange = {},
             placeholder = { Text("Add comment...") },
@@ -150,8 +144,8 @@ fun AddFinanceDialogContent(
         Row(
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            KeyboardKey(label = "📅", color = Blue30, onClick = { showDatePicker.value = true })
-            KeyboardKey(label = "✔", color = Color.Black, textColor = Color.White, onClick = {
+            KeyboardKey(label = "📅", onClick = { showDatePicker.value = true })
+            KeyboardKey(label = "✔", onClick = {
                 if (!validateValues(amount.value, category.value)) {
                     Log.i("AddFinanceDialog", "Invalid values")
                 } else {
@@ -191,8 +185,8 @@ fun generateFinance(amount: String, category: Category, date: Long): Finance? {
 @Composable
 fun AddFinanceDialogPreview() {
     val amount = remember { mutableStateOf("0.00") }
-    val financeType1 = FinanceTypes.buildFake()
-    val financeType2 = FinanceTypes.buildFake()
+    val financeType1 = FinanceTypes.buildIncomeFake()
+    val financeType2 = FinanceTypes.buildSavingFake()
 
     val categories = listOf(
         Category.buildFakeByFinanceType(financeType = financeType1),
