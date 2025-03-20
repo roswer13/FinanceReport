@@ -185,8 +185,8 @@ fun generateFinance(amount: String, category: Category, date: Long): Finance? {
 @Composable
 fun AddFinanceDialogPreview() {
     val amount = remember { mutableStateOf("0.00") }
-    val financeType1 = FinanceTypes.buildFake()
-    val financeType2 = FinanceTypes.buildFake()
+    val financeType1 = FinanceTypes.buildIncomeFake()
+    val financeType2 = FinanceTypes.buildSavingFake()
 
     val categories = listOf(
         Category.buildFakeByFinanceType(financeType = financeType1),

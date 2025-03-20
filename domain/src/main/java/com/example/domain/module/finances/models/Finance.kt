@@ -2,6 +2,7 @@ package com.example.domain.module.finances.models
 
 import com.example.domain.module.categories.model.Category
 import java.util.Date
+import kotlin.random.Random
 
 class Finance(
     val id: Int = 0,
@@ -12,11 +13,20 @@ class Finance(
     val creationDate: Date = Date()
 ) {
     companion object {
-        fun buildFake() = Finance(
+        fun buildIncomeFake() = Finance(
             id = 1,
             date = Date(),
-            amount = 100.0,
-            category = Category.buildFake(),
+            amount = Random.nextDouble(10.0, 100.0),
+            category = Category.buildIncomeFake(),
+            description = "Description of the finance",
+            creationDate = Date()
+        )
+
+        fun buildSavingFake() = Finance(
+            id = 1,
+            date = Date(),
+            amount = Random.nextDouble(10.0, 100.0),
+            category = Category.buildSavingFake(),
             description = "Description of the finance",
             creationDate = Date()
         )

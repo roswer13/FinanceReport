@@ -9,6 +9,9 @@ class FinanceUseCase @Inject constructor(
 ) {
     suspend fun getFinancesList(): List<Finance> = repository.getFinancesList()
 
+    suspend fun getFinancesListByMonthYear(month: Int, year: Int): List<Finance> =
+        repository.getFinancesListByMonthYear(month, year)
+
     suspend fun getFinanceById(id: Int): Finance = repository.getFinanceById(id)
 
     suspend fun saveFinance(finance: Finance): Boolean = repository.saveFinance(finance)

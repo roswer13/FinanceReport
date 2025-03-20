@@ -5,9 +5,13 @@ data class FinanceTypes(
     val name: String
 ) {
     companion object {
-        fun buildFake() = FinanceTypes(
+        fun buildIncomeFake() = FinanceTypes(
             id = 1,
             name = "Income"
+        )
+        fun buildSavingFake() = FinanceTypes(
+            id = 2,
+            name = "Saving"
         )
     }
 }

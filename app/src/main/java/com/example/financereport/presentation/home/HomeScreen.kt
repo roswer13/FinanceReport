@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
@@ -26,14 +26,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.domain.module.categories.model.Category
 import com.example.domain.module.categories.model.FinanceTypes
+import com.example.financereport.R
+import com.example.financereport.presentation.components.AnimatedCounter
 import com.example.financereport.presentation.components.AppTopBar
 import com.example.financereport.presentation.components.MonthPicker
+import com.example.financereport.presentation.components.YearPicker
 import com.example.financereport.presentation.dialogs.AddFinanceDialog
 import com.example.financereport.presentation.home.viewmodel.HomeUiAction
 import com.example.financereport.presentation.home.viewmodel.HomeUiEvent
@@ -51,6 +55,10 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 is HomeUiEvent.OnCreateFinance -> {
                     viewModel.onCreateFinance(event.finance)
                 }
+
+                is HomeUiEvent.OnFindFinancesByMonthAndYear -> {
+                    viewModel.findFinancesByMonthAndYear(event.month, event.year)
+                }
             }
         }
     }
@@ -61,9 +69,10 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 @Composable
 fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
     val finances = uiState.finances
-    var month by remember { mutableIntStateOf(0) }
+    var month by remember { mutableIntStateOf(uiState.month) }
+    var year by remember { mutableIntStateOf(uiState.year) }
 
-    Scaffold(topBar = { AppTopBar(title = "Home") }) { paddingValues ->
+    Scaffold(topBar = { AppTopBar(title = stringResource(R.string.app_name)) }) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -73,37 +82,83 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                MonthPicker(selectedMonth = month, onMonthSelected = { month = it })
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        16.dp, Alignment.End
+                    )
+                ) {
+                    MonthPicker(selectedMonth = month, onMonthSelected = {
+                        month = it
+                        viewModel.findFinancesByMonthAndYear(month = month, year = year)
+                    })
+                    YearPicker(
+                        selectedYear = year, onYearSelected = {
+                            year = it
+                            viewModel.findFinancesByMonthAndYear(month = month, year = year)
+                        }, startYear = 2023
+                    )
+                }
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                        .padding(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     // list of categories
-                    if (finances.isEmpty()) {
+                    if (uiState.financeTypes.isEmpty()) {
                         Box(
-                            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
                         ) {
                             Text(text = "No finances found")
                         }
                     } else {
-                        LazyColumn(
-                            Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                                .padding(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            items(finances.size) { index ->
-                                val finance = finances[index]
-                                Card {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(text = "Total Finances", fontSize = 18.sp)
+                                AnimatedCounter(
+                                    targetNumber = finances.sumOf { it.amount }.toInt(),
+                                    bigNumber = true
+                                )
+                            }
+
+                            uiState.financeTypes.forEach { financeType ->
+                                Log.i("HomeScreen", "FinanceType: $financeType")
+                                val total = finances.filter {
+                                    it.category.financeType.id == financeType.id
+                                }.sumOf { it.amount }
+                                Log.i("HomeScreen", "Total: $total")
+
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .padding(20.dp)
+                                        .weight(1f)
+                                ) {
                                     Column(
                                         modifier = Modifier
                                             .padding(8.dp)
+                                            .fillMaxHeight()
                                             .fillMaxWidth()
+                                            .weight(1f),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.spacedBy(
+                                            8.dp,
+                                            Alignment.CenterVertically
+                                        )
                                     ) {
-                                        Text(text = finance.amount.toString())
-                                        Text(text = finance.category.name)
-                                        Text(text = finance.category.financeType.name)
-                                        Text(text = finance.date.toString())
+                                        Text(text = financeType.name, fontSize = 24.sp)
+                                        AnimatedCounter(targetNumber = total.toInt())
                                     }
                                 }
                             }
@@ -164,4 +219,13 @@ fun HomeScreenPreview() {
 @Composable
 fun HomeScreenEmptyPreview() {
     HomeScreen(viewModel = HomeUiAction.buildFake(), uiState = MutableHomeUiState.buildEmptyFake())
+}
+
+@Preview(name = "Finances Empty Home Screen")
+@Composable
+fun HomeScreenFinancesEmptyPreview() {
+    HomeScreen(
+        viewModel = HomeUiAction.buildFake(),
+        uiState = MutableHomeUiState.buildEmptyFinancesFake()
+    )
 }

@@ -55,5 +55,5 @@ fun CategoryItem(category: Category, onClick: (Category) -> Unit) {
 @Preview
 @Composable
 fun CategoryItemPreview() {
-    CategoryItem(category = Category.buildFake(), onClick = {})
+    CategoryItem(category = Category.buildIncomeFake(), onClick = {})
 }
