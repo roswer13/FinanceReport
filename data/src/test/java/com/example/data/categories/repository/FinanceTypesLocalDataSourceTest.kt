@@ -25,7 +25,8 @@ class FinanceTypesLocalDataSourceTest {
     @Test
     fun `getAll should return list of finance types`() = runBlocking {
         val financeTypes = listOf(
-            FinanceTypeEntity(id = 1, name = "Income"), FinanceTypeEntity(id = 2, name = "Expense")
+            FinanceTypeEntity(id = 1, name = "Income", icon = 1, color = "#FFFFFF"),
+            FinanceTypeEntity(id = 2, name = "Expense", icon = 2, color = "#FFFFFF")
         )
         coEvery { financeTypeDao.getAll() } returns financeTypes
 
@@ -53,7 +54,8 @@ class FinanceTypesLocalDataSourceTest {
 
     @Test
     fun `insertOrUpdate should return success when operation is successful`() = runBlocking {
-        val financeTypes = listOf(FinanceTypeEntity(id = 1, name = "Income"))
+        val financeTypes =
+            listOf(FinanceTypeEntity(id = 1, name = "Income", icon = 1, color = "#FFFFFF"))
         coEvery { financeTypeDao.insertOrUpdate(financeTypes) } returns Unit
 
         val result = localDataSource.insertOrUpdate(financeTypes)
@@ -63,7 +65,8 @@ class FinanceTypesLocalDataSourceTest {
 
     @Test
     fun `insertOrUpdate should log error and return failure when exception occurs`() = runBlocking {
-        val financeTypes = listOf(FinanceTypeEntity(id = 1, name = "Income"))
+        val financeTypes =
+            listOf(FinanceTypeEntity(id = 1, name = "Income", icon = 1, color = "#FFFFFF"))
         val exception = Exception("Database error")
         coEvery { financeTypeDao.insertOrUpdate(financeTypes) } throws exception
 

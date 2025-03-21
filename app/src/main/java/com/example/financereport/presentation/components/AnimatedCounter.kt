@@ -20,7 +20,7 @@ fun AnimatedCounter(targetNumber: Int, bigNumber: Boolean = false) {
     }) { number ->
         Text(
             text = number.toString(),
-            style = MaterialTheme.typography.titleLarge.copy(fontSize = if (bigNumber) 42.sp else 36.sp)
+            style = MaterialTheme.typography.titleLarge.copy(fontSize = if (bigNumber) 42.sp else 28.sp)
         )
     }
 }

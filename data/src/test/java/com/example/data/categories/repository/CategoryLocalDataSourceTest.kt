@@ -117,10 +117,10 @@ class CategoryLocalDataSourceTest {
 
     companion object {
         val financeType1 = FinanceTypeEntity(
-            id = 1, name = "Finance Type 1"
+            id = 1, name = "Finance Type 1", icon = 1, color = "#FFFFFF"
         )
         val financeType2 = FinanceTypeEntity(
-            id = 2, name = "Finance Type 2"
+            id = 2, name = "Finance Type 2", icon = 1, color = "#FFFFFF"
         )
 
         val category1 = CategoryEntity(
