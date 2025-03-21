@@ -2,9 +2,9 @@
 <resources>
     <string name="app_name">Rapport Financier</string>
 
-    <string name="income">Revenu</string>
+    <string name="income">Revenus</string>
     <string name="expense">Dépenses</string>
-    <string name="saving">Épargne</string>
+    <string name="saving">Épargnes</string>
 
     <string name="payroll">Paie</string>
     <string name="transfer">Virement</string>
@@ -12,6 +12,23 @@
     <string name="scholarships">Bourses et Subventions</string>
     <string name="extraordinary_income">Revenu Extraordinaire</string>
     <string name="equity_income">Gains en Capital</string>
+
+    <string name="rent_or_mortgage">Loyer ou Hypothèque</string>
+    <string name="food">Alimentation</string>
+    <string name="shopping">Achats</string>
+    <string name="phone_internet">Téléphonie et Internet</string>
+    <string name="electricity">Électricité</string>
+    <string name="gas">Gaz</string>
+    <string name="water">Eau</string>
+    <string name="transport_fuel">Transport et carburants</string>
+    <string name="insurance">Assurances</string>
+    <string name="taxes_fines">Impôts, taxes et amendes</string>
+    <string name="fees_dues">Inscriptions et cotisations</string>
+    <string name="leisure">Loisirs</string>
+    <string name="travel">Voyages</string>
+    <string name="extra_expenses">Dépenses extraordinaires</string>
+    <string name="asset_losses">Pertes de patrimoine</string>
+    <string name="others">Autres</string>
 
     <string name="cryptocurrencies">Cryptomonnaies</string>
     <string name="stock_exchange">Bourse</string>
