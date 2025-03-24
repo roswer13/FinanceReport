@@ -1,6 +1,6 @@
 package com.example.financereport.presentation.home.components
 
-import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,12 +9,16 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,14 +27,12 @@ import com.example.domain.module.categories.model.FinanceTypes
 import com.example.domain.module.finances.models.Finance
 import com.example.financereport.presentation.components.AnimatedCircle
 import com.example.financereport.presentation.components.AnimatedCounter
-import com.example.financereport.ui.theme.FinanceReportTheme
 
 @Composable
-fun HomeContent(financesTypes: List<FinanceTypes>, finances : List<Finance>) {
+fun HomeContent(financesTypes: List<FinanceTypes>, finances: List<Finance>) {
     if (financesTypes.isEmpty()) {
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
         ) {
             Text(text = "No finances found")
         }
@@ -43,18 +45,20 @@ fun HomeContent(financesTypes: List<FinanceTypes>, finances : List<Finance>) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val totalAmount = finances.sumOf { it.amount }.toFloat()
+            val totalAmount = finances.sumOf { it.amount }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "Total Finances", fontSize = 18.sp)
                 AnimatedCounter(
-                    targetNumber = totalAmount.toInt(),
-                    bigNumber = true
+                    targetNumber = totalAmount, bigNumber = true
                 )
             }
 
             val financesTypesColors = financesTypes.map { Color(it.color.toColorInt()) }
-            val financesTotalsByFinancesType = financesTypes.map { financeType -> (finances.filter {it.category.financeType.id == financeType.id}.sumOf { it.amount } / totalAmount).toFloat() }
+            val financesTotalsByFinancesType = financesTypes.map { financeType ->
+                (finances.filter { it.category.financeType.id == financeType.id }
+                    .sumOf { it.amount } / totalAmount).toFloat()
+            }
 
             AnimatedCircle(
                 modifier = Modifier
@@ -65,61 +69,66 @@ fun HomeContent(financesTypes: List<FinanceTypes>, finances : List<Finance>) {
                 colors = financesTypesColors
             )
 
-            Row (
-                modifier = Modifier.fillMaxSize().weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+            LazyColumn(modifier = Modifier.padding(horizontal = 10.dp).weight(1f)) {
+                items(financesTypes.size) { position ->
+                    val financeType = financesTypes[position]
+                    val total = finances.filter { it.category.financeType.id == financeType.id }.sumOf { it.amount }
 
-                financesTypes.forEach { financeType -> val total = finances.filter { it.category.financeType.id == financeType.id }.sumOf { it.amount }
-
-                    Card(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp)
-                            .weight(1f)
+                    Row(
+                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(
-                                8.dp,
-                                Alignment.CenterVertically
-                            )
+                        Box(
+                            modifier = Modifier.size(70.dp),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Text(text = financeType.name, fontSize = 18.sp)
-                            AnimatedCounter(targetNumber = total.toInt())
+                            Box(
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .background(
+                                        color = Color(financeType.color.toColorInt()),
+                                        shape = CircleShape
+                                    )
+                            )
+
+                            Icon(
+                                painter = painterResource(id = financeType.icon),
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp),
+                                tint = Color.DarkGray
+                            )
+                        }
+                        Column {
+                            Text(
+                                text = financeType.name,
+                                fontSize = 18.sp
+                            )
+                            AnimatedCounter(targetNumber = total)
                         }
                     }
                 }
             }
+
         }
     }
 }
 
-@Preview(
-    name = "Home Dark Screen",
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
-@Preview(
-    name = "Home Screen",
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-)
+@Preview(showBackground = true)
 @Composable
 fun HomeContentPreview() {
-    FinanceReportTheme {
-        val financeTypes = listOf(
-            FinanceTypes.buildIncomeFake(),
-            FinanceTypes.buildIncomeFake(),
-        )
-        val finances = listOf(
-            Finance.buildIncomeFake(),
-            Finance.buildIncomeFake(),
-            Finance.buildIncomeFake(),
-            Finance.buildSavingFake(),
-            Finance.buildSavingFake(),
-        )
-        HomeContent(financesTypes = financeTypes, finances = finances)
-    }
+    val financeTypes = listOf(
+        FinanceTypes.buildIncomeFake(),
+        FinanceTypes.buildExpenseFake(),
+        FinanceTypes.buildSavingFake(),
+    )
+    val finances = listOf(
+        Finance.buildIncomeFake(),
+        Finance.buildIncomeFake(),
+        Finance.buildIncomeFake(),
+        Finance.buildSavingFake(),
+        Finance.buildSavingFake(),
+        Finance.buildExpenseFake(),
+        Finance.buildExpenseFake(),
+    )
+    HomeContent(financesTypes = financeTypes, finances = finances)
 }

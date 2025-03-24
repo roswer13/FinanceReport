@@ -13,4 +13,6 @@
     <string name="october">Outubro</string>
     <string name="november">Novembro</string>
     <string name="december">Dezembro</string>
+
+    <string name="add_comment">Adicione comentário…</string>
 </resources>
