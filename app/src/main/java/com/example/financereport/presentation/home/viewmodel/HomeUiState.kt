@@ -35,11 +35,12 @@ class MutableHomeUiState : HomeUiState, Updatable {
             categories = listOf(
                 Category.buildSavingFake(),
                 Category.buildIncomeFake(),
-                Category.buildIncomeFake(),
+                Category.buildExpenseFake(),
             )
             financeTypes = listOf(
                 FinanceTypes.buildIncomeFake(),
-                FinanceTypes.buildIncomeFake(),
+                FinanceTypes.buildExpenseFake(),
+                FinanceTypes.buildSavingFake(),
             )
             finances = listOf(
                 Finance.buildIncomeFake(),
@@ -47,6 +48,8 @@ class MutableHomeUiState : HomeUiState, Updatable {
                 Finance.buildIncomeFake(),
                 Finance.buildSavingFake(),
                 Finance.buildSavingFake(),
+                Finance.buildExpenseFake(),
+                Finance.buildExpenseFake(),
             )
             month = 2
             year = 2025

@@ -10,4 +10,5 @@ class FinanceTypeEntity(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "icon") val icon: Int,
     @ColumnInfo(name = "color") val color: String,
+    @ColumnInfo(name = "type") val type: Int
 )

@@ -17,4 +17,6 @@
     <string name="december">December</string>
 
     <string name="add_comment">Add comment…</string>
+    <string name="saving">Saving</string>
+    <string name="available_saving">Available saving</string>
 </resources>

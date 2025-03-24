@@ -6,6 +6,7 @@ import com.example.data.R
 import com.example.data.categories.mapper.toDomain
 import com.example.data.categories.mapper.toEntity
 import com.example.domain.module.categories.model.FinanceTypes
+import com.example.domain.module.categories.model.FinanceTypesEnum
 import com.example.domain.module.categories.repository.FinanceTypesRepository
 import com.example.domain.utils.ColorUtils.getColorHex
 import javax.inject.Inject
@@ -35,7 +36,8 @@ class FinanceTypesRepositoryImpl @Inject constructor(
                 id = incomeId,
                 name = resources.getString(R.string.income),
                 icon = R.drawable.income,
-                color = getColorHex(context, R.color.green)
+                color = getColorHex(context, R.color.green),
+                type = FinanceTypesEnum.INCOME
             )
         )
         finances.add(
@@ -43,7 +45,8 @@ class FinanceTypesRepositoryImpl @Inject constructor(
                 id = expenseId,
                 name = resources.getString(R.string.expense),
                 icon = R.drawable.expense,
-                color = getColorHex(context, R.color.lavender)
+                color = getColorHex(context, R.color.lavender),
+                type = FinanceTypesEnum.EXPENSE
             )
         )
         finances.add(
@@ -51,7 +54,8 @@ class FinanceTypesRepositoryImpl @Inject constructor(
                 id = savingId,
                 name = resources.getString(R.string.saving),
                 icon = R.drawable.savings,
-                color = getColorHex(context, R.color.blue)
+                color = getColorHex(context, R.color.blue),
+                type = FinanceTypesEnum.SAVING
             )
         )
 

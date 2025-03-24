@@ -73,8 +73,7 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 60.dp),
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {

@@ -19,12 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import com.example.domain.module.categories.model.FinanceTypes
+import com.example.domain.module.categories.model.FinanceTypesEnum
 import com.example.domain.module.finances.models.Finance
+import com.example.financereport.R
 import com.example.financereport.presentation.components.AnimatedCircle
 import com.example.financereport.presentation.components.AnimatedCounter
 
@@ -40,18 +43,37 @@ fun HomeContent(financesTypes: List<FinanceTypes>, finances: List<Finance>) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(8.dp),
+                .fillMaxHeight(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val totalAmount = finances.sumOf { it.amount }
+            val financesIncome =
+                finances.filter { it.category.financeType.type == FinanceTypesEnum.INCOME }
+                    .sumOf { it.amount }
+            val financesExpense =
+                finances.filter { it.category.financeType.type == FinanceTypesEnum.EXPENSE }
+                    .sumOf { it.amount }
+            val financesSaving =
+                finances.filter { it.category.financeType.type == FinanceTypesEnum.SAVING }
+                    .sumOf { it.amount }
+
+            val totalAmountFinance = financesIncome - financesExpense
+            val totalAmountReal = totalAmountFinance - financesSaving
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Total Finances", fontSize = 18.sp)
+                Text(text = stringResource(R.string.saving), fontSize = 18.sp)
                 AnimatedCounter(
-                    targetNumber = totalAmount, bigNumber = true
+                    targetNumber = totalAmountFinance, bigNumber = true
                 )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(text = stringResource(R.string.available_saving))
+                AnimatedCounter(targetNumber = totalAmountReal)
             }
 
             val financesTypesColors = financesTypes.map { Color(it.color.toColorInt()) }
@@ -69,13 +91,20 @@ fun HomeContent(financesTypes: List<FinanceTypes>, finances: List<Finance>) {
                 colors = financesTypesColors
             )
 
-            LazyColumn(modifier = Modifier.padding(horizontal = 10.dp).weight(1f)) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .weight(1f)
+            ) {
                 items(financesTypes.size) { position ->
                     val financeType = financesTypes[position]
-                    val total = finances.filter { it.category.financeType.id == financeType.id }.sumOf { it.amount }
+                    val total = finances.filter { it.category.financeType.id == financeType.id }
+                        .sumOf { it.amount }
 
                     Row(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Box(
@@ -99,10 +128,7 @@ fun HomeContent(financesTypes: List<FinanceTypes>, finances: List<Finance>) {
                             )
                         }
                         Column {
-                            Text(
-                                text = financeType.name,
-                                fontSize = 18.sp
-                            )
+                            Text(text = financeType.name)
                             AnimatedCounter(targetNumber = total)
                         }
                     }

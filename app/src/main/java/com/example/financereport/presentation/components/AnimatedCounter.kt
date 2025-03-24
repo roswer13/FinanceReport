@@ -30,7 +30,7 @@ fun AnimatedCounter(targetNumber: Double, bigNumber: Boolean = false) {
             softWrap = false,
             overflow = TextOverflow.Clip,
             text = currencyInstance.format(number),
-            style = MaterialTheme.typography.titleLarge.copy(fontSize = if (bigNumber) 42.sp else 28.sp)
+            style = MaterialTheme.typography.titleLarge.copy(fontSize = if (bigNumber) 38.sp else 22.sp)
         )
     }
 }

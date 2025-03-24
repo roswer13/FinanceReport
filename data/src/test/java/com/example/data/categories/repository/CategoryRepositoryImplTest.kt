@@ -10,6 +10,7 @@ import com.example.data.databese.entity.CategoryEntity
 import com.example.data.databese.entity.FinanceTypeEntity
 import com.example.domain.module.categories.model.Category
 import com.example.domain.module.categories.model.FinanceTypes
+import com.example.domain.module.categories.model.FinanceTypesEnum
 import com.example.domain.utils.Logger
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -55,13 +56,25 @@ class CategoryRepositoryImplTest {
     @Test
     fun `getCategoryList returns categories mapped from data source`() = runBlocking {
         // Arrange
-        val incomeType = FinanceTypes(id = 1, name = "Income", icon = 123, color = "#FFFFFF")
-        val expenseType = FinanceTypes(id = 2, name = "Expense", icon = 124, color = "#FFFFFF")
-        val savingType = FinanceTypes(id = 3, name = "Saving", icon = 125, color = "#FFFFFF")
+        val incomeType = FinanceTypes(
+            id = 1, name = "Income", icon = 123, color = "#FFFFFF", type = FinanceTypesEnum.INCOME
+        )
+        val expenseType = FinanceTypes(
+            id = 2, name = "Expense", icon = 124, color = "#FFFFFF", type = FinanceTypesEnum.EXPENSE
+        )
+        val savingType = FinanceTypes(
+            id = 3, name = "Saving", icon = 125, color = "#FFFFFF", type = FinanceTypesEnum.SAVING
+        )
         val financeTypes = listOf(incomeType, expenseType, savingType)
 
         val financeTypeEntities = financeTypes.map {
-            FinanceTypeEntity(id = it.id, name = it.name, icon = it.icon, color = it.color)
+            FinanceTypeEntity(
+                id = it.id,
+                name = it.name,
+                icon = it.icon,
+                color = it.color,
+                type = it.type.ordinal
+            )
         }
 
         val categoryEntities = listOf(

@@ -2,6 +2,7 @@ package com.example.data.categories.mapper
 
 import com.example.data.databese.entity.FinanceTypeEntity
 import com.example.domain.module.categories.model.FinanceTypes
+import com.example.domain.module.categories.model.FinanceTypesEnum
 
 /**
  * Extension function to convert a `FinanceTypes` object to a `FinanceTypeEntity` object.
@@ -10,7 +11,7 @@ import com.example.domain.module.categories.model.FinanceTypes
  * @return FinanceTypeEntity The converted entity object.
  */
 fun FinanceTypes.toEntity() = FinanceTypeEntity(
-    id = this.id, name = this.name, icon = this.icon, color = this.color
+    id = this.id, name = this.name, icon = this.icon, color = this.color, type = this.type.ordinal
 )
 
 /**
@@ -20,5 +21,5 @@ fun FinanceTypes.toEntity() = FinanceTypeEntity(
  * @return FinanceTypes The converted domain model object.
  */
 fun FinanceTypeEntity.toDomain(): FinanceTypes {
-    return FinanceTypes(id = id, name = name, icon = icon, color = color)
+    return FinanceTypes(id = id, name = name, icon = icon, color = color, type = FinanceTypesEnum.entries[type])
 }
