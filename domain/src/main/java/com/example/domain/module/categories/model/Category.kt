@@ -27,6 +27,14 @@ data class Category(
             financeType = FinanceTypes.buildSavingFake()
         )
 
+        fun buildExpenseFake() = Category(
+            id = 1,
+            icon = R.drawable.icon_test,
+            name = "Savings",
+            color = ColorUtils.generateRandomColorHex(),
+            financeType = FinanceTypes.buildExpenseFake()
+        )
+
         fun buildFakeByFinanceType(financeType: FinanceTypes) = Category(
             id = 1,
             icon = R.drawable.icon_test,

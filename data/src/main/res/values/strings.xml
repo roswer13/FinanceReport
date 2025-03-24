@@ -2,9 +2,9 @@
 <resources>
     <string name="app_name">Finance Report</string>
 
-    <string name="income">Ingreso</string>
-    <string name="expense">Gasto</string>
-    <string name="saving">Ahorro</string>
+    <string name="income">Ingresos</string>
+    <string name="expense">Gastos</string>
+    <string name="saving">Ahorros</string>
 
     <string name="payroll">Nómina</string>
     <string name="transfer">Transferencia</string>
@@ -12,6 +12,23 @@
     <string name="scholarships">Becas y subvenciones</string>
     <string name="extraordinary_income">Ingresos extraordinarios</string>
     <string name="equity_income">Ganancias Patrimoniales</string>
+
+    <string name="rent_or_mortgage">Alquiler o Hipoteca</string>
+    <string name="food">Alimentación</string>
+    <string name="shopping">Compras</string>
+    <string name="phone_internet">Telefonía e Internet</string>
+    <string name="electricity">Luz</string>
+    <string name="gas">Gas</string>
+    <string name="water">Agua</string>
+    <string name="transport_fuel">Transporte y carburantes</string>
+    <string name="insurance">Seguros</string>
+    <string name="taxes_fines">Impuestos, tasas y multas</string>
+    <string name="fees_dues">Matrículas y cuotas</string>
+    <string name="leisure">Ocio</string>
+    <string name="travel">Viajes</string>
+    <string name="extra_expenses">Gastos extraordinarios</string>
+    <string name="asset_losses">Pérdidas de patrimonio</string>
+    <string name="others">Otros</string>
 
     <string name="cryptocurrencies">Criptomonedas</string>
     <string name="stock_exchange">Bolsa</string>

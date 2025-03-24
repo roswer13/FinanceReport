@@ -30,5 +30,14 @@ class Finance(
             description = "Description of the finance",
             creationDate = Date()
         )
+
+        fun buildExpenseFake() = Finance(
+            id = 1,
+            date = Date(),
+            amount = Random.nextDouble(10.0, 100.0),
+            category = Category.buildExpenseFake(),
+            description = "Description of the expense",
+            creationDate = Date()
+        )
     }
 }

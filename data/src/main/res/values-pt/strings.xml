@@ -2,9 +2,9 @@
 <resources>
     <string name="app_name">Relatório Financeiro</string>
 
-    <string name="income">Renda</string>
-    <string name="expense">Despesa</string>
-    <string name="saving">Economia</string>
+    <string name="income">Rendas</string>
+    <string name="expense">Despesas</string>
+    <string name="saving">Economias</string>
 
     <string name="payroll">Folha de Pagamento</string>
     <string name="transfer">Transferência</string>
@@ -12,6 +12,23 @@
     <string name="scholarships">Bolsas e Subsídios</string>
     <string name="extraordinary_income">Renda Extraordinária</string>
     <string name="equity_income">Ganhos de Capital</string>
+
+    <string name="rent_or_mortgage">Aluguel ou Hipoteca</string>
+    <string name="food">Alimentação</string>
+    <string name="shopping">Compras</string>
+    <string name="phone_internet">Telefonia e Internet</string>
+    <string name="electricity">Luz</string>
+    <string name="gas">Gás</string>
+    <string name="water">Água</string>
+    <string name="transport_fuel">Transporte e Combustíveis</string>
+    <string name="insurance">Seguros</string>
+    <string name="taxes_fines">Impostos, taxas e multas</string>
+    <string name="fees_dues">Matrículas e mensalidades</string>
+    <string name="leisure">Lazer</string>
+    <string name="travel">Viagens</string>
+    <string name="extra_expenses">Despesas extraordinárias</string>
+    <string name="asset_losses">Perdas patrimoniais</string>
+    <string name="others">Outros</string>
 
     <string name="cryptocurrencies">Criptomoedas</string>
     <string name="stock_exchange">Bolsa de Valores</string>

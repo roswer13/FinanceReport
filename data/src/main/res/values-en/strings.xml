@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">FinanceReport</string>
 
-    <string name="income">Income</string>
+    <string name="income">Incomes</string>
     <string name="expense">Expenses</string>
     <string name="saving">Savings</string>
 
@@ -12,6 +12,23 @@
     <string name="scholarships">Scholarships and Grants</string>
     <string name="extraordinary_income">Extraordinary Income</string>
     <string name="equity_income">Capital Gains</string>
+
+    <string name="rent_or_mortgage">Rent or Mortgage</string>
+    <string name="food">Food</string>
+    <string name="shopping">Shopping</string>
+    <string name="phone_internet">Phone and Internet</string>
+    <string name="electricity">Electricity</string>
+    <string name="gas">Gas</string>
+    <string name="water">Water</string>
+    <string name="transport_fuel">Transport and Fuel</string>
+    <string name="insurance">Insurance</string>
+    <string name="taxes_fines">Taxes, Fees and Fines</string>
+    <string name="fees_dues">Tuition and Fees</string>
+    <string name="leisure">Leisure</string>
+    <string name="travel">Travel</string>
+    <string name="extra_expenses">Extraordinary Expenses</string>
+    <string name="asset_losses">Asset Losses</string>
+    <string name="others">Others</string>
 
     <string name="cryptocurrencies">Cryptocurrencies</string>
     <string name="stock_exchange">Stock Exchange</string>

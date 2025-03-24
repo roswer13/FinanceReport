@@ -127,6 +127,152 @@ class CategoryRepositoryImpl @Inject constructor(
                 saving
             )
         )
+
+        // Expenses
+        categories.add(
+            Category(
+                10,
+                R.drawable.building,
+                resources.getString(R.string.rent_or_mortgage),
+                getColorHex(context, R.color.green),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                11,
+                R.drawable.burger,
+                resources.getString(R.string.food),
+                getColorHex(context, R.color.blue),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                12,
+                R.drawable.shopping_bag,
+                resources.getString(R.string.shopping),
+                getColorHex(context, R.color.lavender),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                13,
+                R.drawable.devices,
+                resources.getString(R.string.phone_internet),
+                getColorHex(context, R.color.orange),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                14,
+                R.drawable.bolt,
+                resources.getString(R.string.electricity),
+                getColorHex(context, R.color.yellow),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                15,
+                R.drawable.flame,
+                resources.getString(R.string.gas),
+                getColorHex(context, R.color.pink),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                16,
+                R.drawable.droplet,
+                resources.getString(R.string.water),
+                getColorHex(context, R.color.sky_blue),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                17,
+                R.drawable.car,
+                resources.getString(R.string.transport_fuel),
+                getColorHex(context, R.color.green),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                18,
+                R.drawable.file_text_shield,
+                resources.getString(R.string.insurance),
+                getColorHex(context, R.color.red),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                19,
+                R.drawable.receipt,
+                resources.getString(R.string.taxes_fines),
+                getColorHex(context, R.color.green),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                20,
+                R.drawable.brand_feedly,
+                resources.getString(R.string.fees_dues),
+                getColorHex(context, R.color.blue),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                21,
+                R.drawable.sparkles,
+                resources.getString(R.string.leisure),
+                getColorHex(context, R.color.peach),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                22,
+                R.drawable.beach,
+                resources.getString(R.string.travel),
+                getColorHex(context, R.color.red),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                23,
+                R.drawable.receipt,
+                resources.getString(R.string.extra_expenses),
+                getColorHex(context, R.color.lavender),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                24,
+                R.drawable.receipt,
+                resources.getString(R.string.asset_losses),
+                getColorHex(context, R.color.blue),
+                expense
+            )
+        )
+        categories.add(
+            Category(
+                25,
+                R.drawable.receipt,
+                resources.getString(R.string.others),
+                getColorHex(context, R.color.peach),
+                expense
+            )
+        )
         return categories
     }
 }

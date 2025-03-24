@@ -24,18 +24,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.domain.module.categories.model.Category
 import com.example.domain.module.categories.model.FinanceTypes
 import com.example.domain.module.finances.models.Finance
+import com.example.financereport.R
 import com.example.financereport.presentation.components.AmountInputField
 import com.example.financereport.presentation.components.DatePickerModal
 import com.example.financereport.presentation.components.KeyboardKey
 import com.example.financereport.presentation.components.NumericKeyboard
 import com.example.financereport.presentation.components.PillDropdown
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,6 +81,8 @@ fun AddFinanceDialogContent(
         remember { mutableStateOf(categories.first { it.financeType.id == financeType.value.id }) }
     val showDatePicker = remember { mutableStateOf(false) }
     val dateLong = remember { mutableLongStateOf(System.currentTimeMillis()) }
+    val comments = remember { mutableStateOf("") }
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     Column(
         modifier = Modifier
@@ -91,6 +96,7 @@ fun AddFinanceDialogContent(
         ) {
             PillDropdown(items = financeTypes.map { it.name },
                 selectedItem = financeType.value.name,
+                backgroundColor = financeType.value.color,
                 onItemSelected = { name ->
                     financeType.value =
                         financeTypes.find { it.name == name } ?: financeTypes.first()
@@ -104,12 +110,12 @@ fun AddFinanceDialogContent(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = category.value.name, fontSize = 16.sp )
         AmountInputField(value = amount.value)
-        Text(text = "${Date(dateLong.longValue)}", fontSize = 16.sp)
-        TextField(value = "",
-            onValueChange = {},
-            placeholder = { Text("Add comment...") },
+        Text(text = dateFormat.format(Date(dateLong.longValue)))
+        TextField(
+            value = comments.value,
+            onValueChange = { comments.value = it },
+            placeholder = { Text(text = stringResource(id = R.string.add_comment)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             colors = TextFieldDefaults.colors(
@@ -119,6 +125,8 @@ fun AddFinanceDialogContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         NumericKeyboard(onNumberClick = { key ->
+            Log.i("AddFinanceDialog", "Key: $key, amount: ${amount.value}")
+            amount.value = if (amount.value == "0.00") "" else amount.value
             Log.i("AddFinanceDialog", "Key: $key, amount: ${amount.value}")
             when (key) {
                 "⌫" -> if (amount.value.isNotEmpty()) {
@@ -130,15 +138,15 @@ fun AddFinanceDialogContent(
                 }
 
                 else -> {
-                    if (amount.value == "0.00") {
-                        amount.value = key
-                    } else {
+                    val parts = amount.value.split(".")
+                    if (parts.size == 1 || (parts.size == 2 && parts[1].length < 2)) {
                         amount.value += key
                     }
                 }
             }
 
-            if (amount.value.isEmpty() || amount.value.equals("0.00")) amount.value = "0.00"
+            Log.i("AddFinanceDialog", "Key: $key, amount: ${amount.value}")
+            if (amount.value.isEmpty() || amount.value == "0.00") amount.value = "0.00"
         })
 
         Row(
@@ -149,7 +157,14 @@ fun AddFinanceDialogContent(
                 if (!validateValues(amount.value, category.value)) {
                     Log.i("AddFinanceDialog", "Invalid values")
                 } else {
-                    onDismiss(generateFinance(amount.value, category.value, dateLong.longValue))
+                    onDismiss(
+                        generateFinance(
+                            amount.value,
+                            category.value,
+                            dateLong.longValue,
+                            comments.value
+                        )
+                    )
                 }
             })
         }
@@ -157,7 +172,8 @@ fun AddFinanceDialogContent(
     }
 
     if (showDatePicker.value) {
-        DatePickerModal(onDateSelected = { it?.let { dateLong.longValue = it } },
+        DatePickerModal(
+            onDateSelected = { it?.let { dateLong.longValue = it } },
             onDismiss = { showDatePicker.value = false },
             initialDateMillis = dateLong.longValue
         )
@@ -168,12 +184,13 @@ fun validateValues(amount: String, category: Category?): Boolean {
     return amount.isNotEmpty() && category != null
 }
 
-fun generateFinance(amount: String, category: Category, date: Long): Finance? {
+fun generateFinance(amount: String, category: Category, date: Long, comments: String): Finance? {
     try {
         return Finance(
             amount = amount.toDouble(),
             category = category,
             date = Date(date),
+            description = comments
         )
     } catch (e: Exception) {
         Log.e("AddFinanceDialog", "Error generating finance: ${e.message}")
