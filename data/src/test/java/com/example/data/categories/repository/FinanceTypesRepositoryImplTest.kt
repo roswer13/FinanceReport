@@ -67,10 +67,10 @@ class FinanceTypesRepositoryImplTest {
 
     companion object {
         val financeType1 = FinanceTypeEntity(
-            id = 1, name = "Finance Type 1", icon = 1, color = "#FFFFFF"
+            id = 1, name = "Finance Type 1", icon = 1, color = "#FFFFFF", type = 1
         )
         val financeType2 = FinanceTypeEntity(
-            id = 2, name = "Finance Type 2", icon = 1, color = "#FFFFFF"
+            id = 2, name = "Finance Type 2", icon = 1, color = "#FFFFFF", type = 2
         )
     }
 }

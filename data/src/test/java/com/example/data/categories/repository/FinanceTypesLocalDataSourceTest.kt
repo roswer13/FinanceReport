@@ -2,6 +2,7 @@ package com.example.data.categories.repository
 
 import com.example.data.databese.dao.FinanceTypeDao
 import com.example.data.databese.entity.FinanceTypeEntity
+import com.example.domain.module.categories.model.FinanceTypesEnum
 import com.example.domain.utils.Logger
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -25,8 +26,8 @@ class FinanceTypesLocalDataSourceTest {
     @Test
     fun `getAll should return list of finance types`() = runBlocking {
         val financeTypes = listOf(
-            FinanceTypeEntity(id = 1, name = "Income", icon = 1, color = "#FFFFFF"),
-            FinanceTypeEntity(id = 2, name = "Expense", icon = 2, color = "#FFFFFF")
+            FinanceTypeEntity(id = 1, name = "Income", icon = 1, color = "#FFFFFF", type = 1),
+            FinanceTypeEntity(id = 2, name = "Expense", icon = 2, color = "#FFFFFF", type = 2)
         )
         coEvery { financeTypeDao.getAll() } returns financeTypes
 
@@ -46,16 +47,18 @@ class FinanceTypesLocalDataSourceTest {
 
         assert(result.isFailure)
         coVerify {
-            logger.logError(
-                any(),
+            logger.logError(any(),
                 match { it.contains("Failure to getAll on FinanceTypesLocalDataSource") })
         }
     }
 
     @Test
     fun `insertOrUpdate should return success when operation is successful`() = runBlocking {
-        val financeTypes =
-            listOf(FinanceTypeEntity(id = 1, name = "Income", icon = 1, color = "#FFFFFF"))
+        val financeTypes = listOf(
+            FinanceTypeEntity(
+                id = 1, name = "Income", icon = 1, color = "#FFFFFF", type = 1
+            )
+        )
         coEvery { financeTypeDao.insertOrUpdate(financeTypes) } returns Unit
 
         val result = localDataSource.insertOrUpdate(financeTypes)
@@ -66,7 +69,15 @@ class FinanceTypesLocalDataSourceTest {
     @Test
     fun `insertOrUpdate should log error and return failure when exception occurs`() = runBlocking {
         val financeTypes =
-            listOf(FinanceTypeEntity(id = 1, name = "Income", icon = 1, color = "#FFFFFF"))
+            listOf(
+                FinanceTypeEntity(
+                    id = 1,
+                    name = "Income",
+                    icon = 1,
+                    color = "#FFFFFF",
+                    type = 1
+                )
+            )
         val exception = Exception("Database error")
         coEvery { financeTypeDao.insertOrUpdate(financeTypes) } throws exception
 

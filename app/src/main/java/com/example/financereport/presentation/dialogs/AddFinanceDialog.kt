@@ -96,7 +96,8 @@ fun AddFinanceDialogContent(
         ) {
             PillDropdown(items = financeTypes.map { it.name },
                 selectedItem = financeType.value.name,
-                backgroundColor = financeType.value.color,
+
+
                 onItemSelected = { name ->
                     financeType.value =
                         financeTypes.find { it.name == name } ?: financeTypes.first()
@@ -152,8 +153,11 @@ fun AddFinanceDialogContent(
         Row(
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            KeyboardKey(label = "📅", onClick = { showDatePicker.value = true })
-            KeyboardKey(label = "✔", onClick = {
+            KeyboardKey(
+                label = "📅",
+                icon = R.drawable.calendar,
+                onClick = { showDatePicker.value = true })
+            KeyboardKey(label = "✔", icon = R.drawable.check, onClick = {
                 if (!validateValues(amount.value, category.value)) {
                     Log.i("AddFinanceDialog", "Invalid values")
                 } else {
