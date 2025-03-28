@@ -28,11 +28,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.domain.module.categories.model.Category
 import com.example.domain.module.categories.model.FinanceTypes
+import com.example.domain.module.finances.models.Finance
 import com.example.financereport.R
 import com.example.financereport.presentation.components.AppTopBar
 import com.example.financereport.presentation.components.MonthPicker
 import com.example.financereport.presentation.components.YearPicker
 import com.example.financereport.presentation.dialogs.AddFinanceDialog
+import com.example.financereport.presentation.dialogs.FinancesDetailDialog
 import com.example.financereport.presentation.home.components.HomeContent
 import com.example.financereport.presentation.home.viewmodel.HomeUiAction
 import com.example.financereport.presentation.home.viewmodel.HomeUiEvent
@@ -72,8 +74,7 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
                 .padding(paddingValues)
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -94,7 +95,7 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
                         }, startYear = 2023
                     )
                 }
-                HomeContent(financesTypes = uiState.financeTypes, finances = uiState.finances)
+                HomeContentScreen(uiState = uiState)
             }
             FinanceScreen(
                 viewModel = viewModel,
@@ -102,6 +103,35 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
                 financeTypes = uiState.financeTypes
             )
         }
+    }
+}
+
+@Composable
+fun HomeContentScreen(
+    uiState: HomeUiState
+) {
+    var financesList by remember { mutableStateOf<List<Finance>?>(null) }
+    var financeTypeSelected by remember { mutableStateOf<FinanceTypes?>(null) }
+    var showDialog by remember { mutableStateOf(false) }
+
+    HomeContent(financesTypes = uiState.financeTypes,
+        finances = uiState.finances,
+        onFinances = { finances, financeType ->
+            financesList = finances
+            financeTypeSelected = financeType
+            showDialog = true
+        })
+
+    if (financesList == null || financeTypeSelected == null)
+        return
+
+    FinancesDetailDialog(
+        isVisible = showDialog,
+        financesList = financesList!!,
+        financeType = financeTypeSelected!!
+    ) {
+        financesList = null
+        showDialog = false
     }
 }
 
@@ -146,7 +176,6 @@ fun HomeScreenEmptyPreview() {
 @Composable
 fun HomeScreenFinancesEmptyPreview() {
     HomeScreen(
-        viewModel = HomeUiAction.buildFake(),
-        uiState = MutableHomeUiState.buildEmptyFinancesFake()
+        viewModel = HomeUiAction.buildFake(), uiState = MutableHomeUiState.buildEmptyFinancesFake()
     )
 }
