@@ -1,8 +1,11 @@
 package com.example.financereport.presentation.dialogs
 
+import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,6 +16,10 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,10 +27,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
+import com.example.domain.module.categories.model.Category
 import com.example.domain.module.categories.model.FinanceTypes
 import com.example.domain.module.finances.models.Finance
 import com.example.financereport.presentation.components.CircleIcon
 import com.example.financereport.presentation.components.TextFontWeight
+import com.example.financereport.presentation.home.viewmodel.HomeUiAction
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -32,9 +41,12 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FinancesDetailDialog(
+    viewModel: HomeUiAction,
     isVisible: Boolean,
     financesList: List<Finance>,
     financeType: FinanceTypes,
+    categories: List<Category>,
+    financeTypes: List<FinanceTypes>,
     onDismiss: () -> Unit
 ) {
     if (isVisible) {
@@ -46,8 +58,11 @@ fun FinancesDetailDialog(
             shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
         ) {
             FinancesDetailContent(
+                viewModel = viewModel,
                 financesList = financesList,
-                financeType = financeType
+                financeType = financeType,
+                categories = categories,
+                financeTypes = financeTypes
             )
         }
     }
@@ -55,11 +70,16 @@ fun FinancesDetailDialog(
 
 @Composable
 fun FinancesDetailContent(
+    viewModel: HomeUiAction,
     financesList: List<Finance>,
-    financeType: FinanceTypes
+    financeType: FinanceTypes,
+    categories: List<Category>,
+    financeTypes: List<FinanceTypes>,
 ) {
     val currencyInstance = NumberFormat.getCurrencyInstance(Locale.getDefault())
     val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    var selectedFinance by remember { mutableStateOf<Finance?>(null) }
+    var showDialog by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -79,7 +99,11 @@ fun FinancesDetailContent(
 
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .clickable {
+                            selectedFinance = finance
+                            showDialog = true
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CircleIcon(
@@ -88,17 +112,22 @@ fun FinancesDetailContent(
                     )
 
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.weight(1f)) {
+                        Column(modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 6.dp)) {
                             TextFontWeight(
-                                text = finance.category.name,
-                                fontWeight = FontWeight.Bold
+                                text = finance.category.name, fontWeight = FontWeight.Bold
                             )
                             if (finance.description != null && finance.description!!.isNotEmpty()) {
                                 Text(text = finance.description!!)
                             }
                         }
-                        Column(horizontalAlignment = Alignment.End) {
+                        Column(
+                            modifier = Modifier.fillMaxHeight(),
+                            horizontalAlignment = Alignment.End
+                        ) {
                             TextFontWeight(
+                                modifier = Modifier.fillMaxHeight(),
                                 text = currencyInstance.format(finance.amount),
                                 fontWeight = FontWeight.Bold
                             )
@@ -109,9 +138,26 @@ fun FinancesDetailContent(
             }
         }
     }
+
+    AddFinanceDialog(
+        isVisible = showDialog,
+        categories = categories,
+        financeTypes = financeTypes,
+        finance = selectedFinance
+    ) { financeResult ->
+        Log.i("FinancesDetailDialog", "Finance: $financeResult")
+        showDialog = false
+        selectedFinance = null
+
+        if (financeResult == null) return@AddFinanceDialog
+        viewModel.onUpdateFinance(financeResult)
+    }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    name = "Finances Detail Content"
+)
 @Composable
 fun FinancesDetailContentPreview() {
     val financeType = FinanceTypes.buildIncomeFake()
@@ -120,8 +166,21 @@ fun FinancesDetailContentPreview() {
         Finance.buildIncomeFake(),
         Finance.buildIncomeFake(),
     )
+    val categories = listOf(
+        Category.buildSavingFake(),
+        Category.buildIncomeFake(),
+        Category.buildExpenseFake(),
+    )
+    val financeTypes = listOf(
+        FinanceTypes.buildIncomeFake(),
+        FinanceTypes.buildExpenseFake(),
+        FinanceTypes.buildSavingFake(),
+    )
     FinancesDetailContent(
+        viewModel = HomeUiAction.buildFake(),
         financesList = financesList,
-        financeType = financeType
+        financeType = financeType,
+        categories = categories,
+        financeTypes = financeTypes
     )
 }

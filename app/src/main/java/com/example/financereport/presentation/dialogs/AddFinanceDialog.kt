@@ -17,7 +17,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,13 +45,12 @@ fun AddFinanceDialog(
     isVisible: Boolean,
     categories: List<Category>,
     financeTypes: List<FinanceTypes>,
+    finance: Finance? = null,
     onDismiss: (Finance?) -> Unit
 ) {
     if (isVisible) {
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         LaunchedEffect(Unit) { sheetState.expand() }
-
-        val amount = remember { mutableStateOf("0.00") }
 
         ModalBottomSheet(
             onDismissRequest = { onDismiss(null) },
@@ -60,9 +58,9 @@ fun AddFinanceDialog(
             shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
         ) {
             AddFinanceDialogContent(
-                amount = amount,
                 categories = categories,
                 financeTypes = financeTypes,
+                finance = finance,
                 onDismiss = onDismiss
             )
         }
@@ -71,17 +69,23 @@ fun AddFinanceDialog(
 
 @Composable
 fun AddFinanceDialogContent(
-    amount: MutableState<String>,
     categories: List<Category>,
     financeTypes: List<FinanceTypes>,
+    finance: Finance? = null,
     onDismiss: (Finance?) -> Unit
 ) {
-    val financeType = remember { mutableStateOf(financeTypes.first()) }
-    val category =
-        remember { mutableStateOf(categories.first { it.financeType.id == financeType.value.id }) }
+    val amountValue = finance?.amount?.toString() ?: "0.00"
+    val financeTypeValue = finance?.category?.financeType ?: financeTypes.first()
+    val categoryValue = finance?.category ?: categories.first { it.financeType.id == financeTypeValue.id }
+    val dateLongValue = finance?.date?.time ?:System.currentTimeMillis()
+    val commentsValue = finance?.description ?: ""
+
+    val amount = remember { mutableStateOf(amountValue) }
+    val financeType = remember { mutableStateOf(financeTypeValue) }
+    val category = remember { mutableStateOf(categoryValue) }
     val showDatePicker = remember { mutableStateOf(false) }
-    val dateLong = remember { mutableLongStateOf(System.currentTimeMillis()) }
-    val comments = remember { mutableStateOf("") }
+    val dateLong = remember { mutableLongStateOf(dateLongValue) }
+    val comments = remember { mutableStateOf(commentsValue) }
     val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     Column(
@@ -205,7 +209,6 @@ fun generateFinance(amount: String, category: Category, date: Long, comments: St
 @Preview(showBackground = true)
 @Composable
 fun AddFinanceDialogPreview() {
-    val amount = remember { mutableStateOf("0.00") }
     val financeType1 = FinanceTypes.buildIncomeFake()
     val financeType2 = FinanceTypes.buildSavingFake()
 
@@ -217,7 +220,7 @@ fun AddFinanceDialogPreview() {
         Category.buildFakeByFinanceType(financeType = financeType2)
     )
     val financeTypes = listOf(financeType1, financeType2)
-    AddFinanceDialogContent(amount = amount,
+    AddFinanceDialogContent(
         categories = categories,
         financeTypes = financeTypes,
         onDismiss = { _ -> })

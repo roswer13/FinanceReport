@@ -55,6 +55,10 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 is HomeUiEvent.OnFindFinancesByMonthAndYear -> {
                     viewModel.findFinancesByMonthAndYear(event.month, event.year)
                 }
+
+                is HomeUiEvent.OnUpdateFinance -> {
+                    Log.i("HomeScreen", "Update finance: ${event.finance}")
+                }
             }
         }
     }
@@ -95,7 +99,7 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
                         }, startYear = 2023
                     )
                 }
-                HomeContentScreen(uiState = uiState)
+                HomeContentScreen(viewModel = viewModel, uiState = uiState)
             }
             FinanceScreen(
                 viewModel = viewModel,
@@ -108,6 +112,7 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
 
 @Composable
 fun HomeContentScreen(
+    viewModel: HomeUiAction,
     uiState: HomeUiState
 ) {
     var financesList by remember { mutableStateOf<List<Finance>?>(null) }
@@ -126,9 +131,12 @@ fun HomeContentScreen(
         return
 
     FinancesDetailDialog(
+        viewModel = viewModel,
         isVisible = showDialog,
         financesList = financesList!!,
-        financeType = financeTypeSelected!!
+        financeType = financeTypeSelected!!,
+        categories = uiState.categories,
+        financeTypes = uiState.financeTypes
     ) {
         financesList = null
         showDialog = false

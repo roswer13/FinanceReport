@@ -69,6 +69,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    override fun onUpdateFinance(finance: Finance) {
+        logger.logInfo(tag, "Update finance: $finance")
+    }
+
     override fun findFinancesByMonthAndYear(month: Int, year: Int) {
         try {
             viewModelScope.launch(Dispatchers.IO) {

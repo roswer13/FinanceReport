@@ -108,7 +108,8 @@ fun HomeContent(
                             .fillMaxWidth()
                             .weight(1f)
                             .clickable { onFinances(financesList, financeType) },
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         CircleIcon(
                             color = Color(financeType.color.toColorInt()),

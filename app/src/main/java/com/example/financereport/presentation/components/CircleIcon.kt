@@ -18,11 +18,11 @@ import com.example.financereport.R
 @Composable
 fun CircleIcon(color: Color, icon: Int) {
     Box(
-        modifier = Modifier.size(50.dp), contentAlignment = Alignment.Center
+        modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center
     ) {
         Box(
             modifier = Modifier
-                .size(40.dp)
+                .size(38.dp)
                 .background(
                     color = color, shape = CircleShape
                 )
@@ -30,7 +30,7 @@ fun CircleIcon(color: Color, icon: Int) {
         Icon(
             painter = painterResource(id = icon),
             contentDescription = null,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(18.dp),
             tint = Color.DarkGray
         )
     }
