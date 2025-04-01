@@ -23,6 +23,13 @@ class FinanceLocalDataSource @Inject constructor(
         logger.logError(tag, "Failure to getById on FinanceLocalDataSource. $it")
     }
 
+    suspend fun update(finance: FinanceEntity): Result<Boolean> = runCatching {
+        financeDao.update(finance)
+        true
+    }.onFailure {
+        logger.logError(tag, "Failure to update on FinanceLocalDataSource. $it")
+    }
+
     suspend fun save(finance: FinanceEntity): Result<Boolean> = runCatching {
         financeDao.insert(finance)
         true

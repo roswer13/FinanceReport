@@ -1,6 +1,6 @@
 package com.example.financereport.presentation.home.components
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,16 +9,12 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,9 +26,14 @@ import com.example.domain.module.finances.models.Finance
 import com.example.financereport.R
 import com.example.financereport.presentation.components.AnimatedCircle
 import com.example.financereport.presentation.components.AnimatedCounter
+import com.example.financereport.presentation.components.CircleIcon
 
 @Composable
-fun HomeContent(financesTypes: List<FinanceTypes>, finances: List<Finance>) {
+fun HomeContent(
+    financesTypes: List<FinanceTypes>,
+    finances: List<Finance>,
+    onFinances: (List<Finance>, FinanceTypes) -> Unit
+) {
     if (financesTypes.isEmpty()) {
         Box(
             modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
@@ -94,39 +95,26 @@ fun HomeContent(financesTypes: List<FinanceTypes>, finances: List<Finance>) {
             LazyColumn(
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
-                    .weight(1f)
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(financesTypes.size) { position ->
                     val financeType = financesTypes[position]
-                    val total = finances.filter { it.category.financeType.id == financeType.id }
-                        .sumOf { it.amount }
+                    val financesList = finances.filter { it.category.financeType.id == financeType.id }
+                    val total = financesList.sumOf { it.amount }
 
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f),
-                        verticalAlignment = Alignment.CenterVertically
+                            .weight(1f)
+                            .clickable { onFinances(financesList, financeType) },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Box(
-                            modifier = Modifier.size(70.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .background(
-                                        color = Color(financeType.color.toColorInt()),
-                                        shape = CircleShape
-                                    )
-                            )
-
-                            Icon(
-                                painter = painterResource(id = financeType.icon),
-                                contentDescription = null,
-                                modifier = Modifier.size(24.dp),
-                                tint = Color.DarkGray
-                            )
-                        }
+                        CircleIcon(
+                            color = Color(financeType.color.toColorInt()),
+                            icon = financeType.icon
+                        )
                         Column {
                             Text(text = financeType.name)
                             AnimatedCounter(targetNumber = total)
@@ -156,5 +144,5 @@ fun HomeContentPreview() {
         Finance.buildExpenseFake(),
         Finance.buildExpenseFake(),
     )
-    HomeContent(financesTypes = financeTypes, finances = finances)
+    HomeContent(financesTypes = financeTypes, finances = finances, onFinances = { _, _ -> })
 }

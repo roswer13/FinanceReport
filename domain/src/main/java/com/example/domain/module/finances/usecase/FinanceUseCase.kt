@@ -14,6 +14,8 @@ class FinanceUseCase @Inject constructor(
 
     suspend fun getFinanceById(id: Int): Finance = repository.getFinanceById(id)
 
+    suspend fun updateFinance(finance: Finance): Boolean = repository.updateFinance(finance)
+
     suspend fun saveFinance(finance: Finance): Boolean = repository.saveFinance(finance)
 
     suspend fun deleteFinance(finance: Finance): Boolean = repository.deleteFinance(finance)
