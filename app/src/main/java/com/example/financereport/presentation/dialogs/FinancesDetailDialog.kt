@@ -1,6 +1,5 @@
 package com.example.financereport.presentation.dialogs
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -32,7 +34,6 @@ import com.example.domain.module.categories.model.FinanceTypes
 import com.example.domain.module.finances.models.Finance
 import com.example.financereport.presentation.components.CircleIcon
 import com.example.financereport.presentation.components.TextFontWeight
-import com.example.financereport.presentation.home.viewmodel.HomeUiAction
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -41,13 +42,14 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FinancesDetailDialog(
-    viewModel: HomeUiAction,
     isVisible: Boolean,
     financesList: List<Finance>,
     financeType: FinanceTypes,
     categories: List<Category>,
     financeTypes: List<FinanceTypes>,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onUpdateFinance: (Finance?) -> Unit,
+    onDeleteFinance: (Finance?) -> Unit
 ) {
     if (isVisible) {
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -57,24 +59,24 @@ fun FinancesDetailDialog(
             sheetState = sheetState,
             shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
         ) {
-            FinancesDetailContent(
-                viewModel = viewModel,
-                financesList = financesList,
+            FinancesDetailContent(financesList = financesList,
                 financeType = financeType,
                 categories = categories,
-                financeTypes = financeTypes
-            )
+                financeTypes = financeTypes,
+                onUpdateFinance = { onUpdateFinance(it) },
+                onDeleteFinance = { onDeleteFinance(it) })
         }
     }
 }
 
 @Composable
 fun FinancesDetailContent(
-    viewModel: HomeUiAction,
     financesList: List<Finance>,
     financeType: FinanceTypes,
     categories: List<Category>,
     financeTypes: List<FinanceTypes>,
+    onUpdateFinance: (Finance?) -> Unit,
+    onDeleteFinance: (Finance?) -> Unit
 ) {
     val currencyInstance = NumberFormat.getCurrencyInstance(Locale.getDefault())
     val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -103,8 +105,7 @@ fun FinancesDetailContent(
                         .clickable {
                             selectedFinance = finance
                             showDialog = true
-                        },
-                    verticalAlignment = Alignment.CenterVertically
+                        }, verticalAlignment = Alignment.CenterVertically
                 ) {
                     CircleIcon(
                         color = Color(finance.category.color.toColorInt()),
@@ -112,9 +113,11 @@ fun FinancesDetailContent(
                     )
 
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier
-                            .weight(1f)
-                            .padding(horizontal = 6.dp)) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = 6.dp)
+                        ) {
                             TextFontWeight(
                                 text = finance.category.name, fontWeight = FontWeight.Bold
                             )
@@ -123,8 +126,7 @@ fun FinancesDetailContent(
                             }
                         }
                         Column(
-                            modifier = Modifier.fillMaxHeight(),
-                            horizontalAlignment = Alignment.End
+                            modifier = Modifier.fillMaxHeight(), horizontalAlignment = Alignment.End
                         ) {
                             TextFontWeight(
                                 modifier = Modifier.fillMaxHeight(),
@@ -133,6 +135,14 @@ fun FinancesDetailContent(
                             )
                             Text(text = dateFormat.format(finance.date))
                         }
+                        Icon(
+                            modifier = Modifier.padding(start = 12.dp).clickable {
+                                onDeleteFinance(finance)
+                            },
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "",
+                            tint = Color.LightGray
+                        )
                     }
                 }
             }
@@ -145,18 +155,16 @@ fun FinancesDetailContent(
         financeTypes = financeTypes,
         finance = selectedFinance
     ) { financeResult ->
-        Log.i("FinancesDetailDialog", "Finance: $financeResult")
         showDialog = false
         selectedFinance = null
 
         if (financeResult == null) return@AddFinanceDialog
-        viewModel.onUpdateFinance(financeResult)
+        onUpdateFinance(financeResult)
     }
 }
 
 @Preview(
-    showBackground = true,
-    name = "Finances Detail Content"
+    showBackground = true, name = "Finances Detail Content"
 )
 @Composable
 fun FinancesDetailContentPreview() {
@@ -177,10 +185,11 @@ fun FinancesDetailContentPreview() {
         FinanceTypes.buildSavingFake(),
     )
     FinancesDetailContent(
-        viewModel = HomeUiAction.buildFake(),
         financesList = financesList,
         financeType = financeType,
         categories = categories,
-        financeTypes = financeTypes
+        financeTypes = financeTypes,
+        onUpdateFinance = {},
+        onDeleteFinance = {}
     )
 }

@@ -77,7 +77,7 @@ fun AddFinanceDialogContent(
     val amountValue = finance?.amount?.toString() ?: "0.00"
     val financeTypeValue = finance?.category?.financeType ?: financeTypes.first()
     val categoryValue = finance?.category ?: categories.first { it.financeType.id == financeTypeValue.id }
-    val dateLongValue = finance?.date?.time ?:System.currentTimeMillis()
+    val dateLongValue = finance?.date?.time ?: System.currentTimeMillis()
     val commentsValue = finance?.description ?: ""
 
     val amount = remember { mutableStateOf(amountValue) }
@@ -167,6 +167,7 @@ fun AddFinanceDialogContent(
                 } else {
                     onDismiss(
                         generateFinance(
+                            finance?.id,
                             amount.value,
                             category.value,
                             dateLong.longValue,
@@ -192,14 +193,22 @@ fun validateValues(amount: String, category: Category?): Boolean {
     return amount.isNotEmpty() && category != null
 }
 
-fun generateFinance(amount: String, category: Category, date: Long, comments: String): Finance? {
+fun generateFinance(
+    id: Int?,
+    amount: String,
+    category: Category,
+    date: Long,
+    comments: String
+): Finance? {
     try {
-        return Finance(
+        val finance = Finance(
             amount = amount.toDouble(),
             category = category,
             date = Date(date),
             description = comments
         )
+        if (id != null) finance.id = id
+        return finance
     } catch (e: Exception) {
         Log.e("AddFinanceDialog", "Error generating finance: ${e.message}")
         return null

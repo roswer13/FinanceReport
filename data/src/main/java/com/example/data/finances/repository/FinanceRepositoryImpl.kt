@@ -44,6 +44,15 @@ class FinanceRepositoryImpl @Inject constructor(
             ?: throw Exception("Category not found"))
     }
 
+    override suspend fun updateFinance(finance: Finance): Boolean {
+        try {
+            localDataSource.update(finance = finance.toEntity())
+            return true
+        } catch (e: Exception) {
+            return false
+        }
+    }
+
     override suspend fun saveFinance(finance: Finance): Boolean {
         try {
             localDataSource.save(finance = finance.toEntity())

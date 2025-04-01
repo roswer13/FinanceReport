@@ -6,7 +6,7 @@ import java.util.Date
 import kotlin.random.Random
 
 class Finance(
-    val id: Int = 0,
+    var id: Int = 0,
     val date: Date,
     val amount: Double,
     val category: Category,

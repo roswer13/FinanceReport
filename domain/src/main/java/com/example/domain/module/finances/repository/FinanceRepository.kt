@@ -32,6 +32,14 @@ interface FinanceRepository {
     suspend fun getFinanceById(id: Int): Finance
 
     /**
+     * Updates a finance object.
+     *
+     * @param finance the [Finance] object to update.
+     * return `true` if the finance was successfully updated, `false` otherwise.
+     */
+    suspend fun updateFinance(finance: Finance): Boolean
+
+    /**
      * Saves a finance object.
      *
      * @param finance The [Finance] object to save.

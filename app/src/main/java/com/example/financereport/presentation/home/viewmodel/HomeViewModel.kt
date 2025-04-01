@@ -47,8 +47,7 @@ class HomeViewModel @Inject constructor(
                 _uiState.financeTypes = financeTypes
                 _uiState.categories = categoriesUseCase.getCategoryList()
                 _uiState.finances = financeUseCase.getFinancesListByMonthYear(
-                    month = _uiState.month,
-                    year = _uiState.year
+                    month = _uiState.month, year = _uiState.year
                 )
                 _uiState.error = false
             }
@@ -70,15 +69,32 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onUpdateFinance(finance: Finance) {
-        logger.logInfo(tag, "Update finance: $finance")
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                financeUseCase.updateFinance(finance)
+                loadHome()
+            }
+        } catch (e: Exception) {
+            logger.logError(tag, "Error updating finance: ${e.message}")
+        }
+    }
+
+    override fun onDeleteFinance(finance: Finance) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                financeUseCase.deleteFinance(finance)
+                loadHome()
+            }
+        } catch (e: Exception) {
+            logger.logError(tag, "Error deleting finance: ${e.message}")
+        }
     }
 
     override fun findFinancesByMonthAndYear(month: Int, year: Int) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 _uiState.finances = financeUseCase.getFinancesListByMonthYear(
-                    month = month,
-                    year = year
+                    month = month, year = year
                 )
             }
         } catch (e: Exception) {

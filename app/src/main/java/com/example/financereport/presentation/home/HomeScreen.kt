@@ -1,6 +1,5 @@
 package com.example.financereport.presentation.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,7 +56,11 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 }
 
                 is HomeUiEvent.OnUpdateFinance -> {
-                    Log.i("HomeScreen", "Update finance: ${event.finance}")
+                    viewModel.onUpdateFinance(event.finance)
+                }
+
+                is HomeUiEvent.OnDeleteFinance -> {
+                    viewModel.onDeleteFinance(event.finance)
                 }
             }
         }
@@ -111,10 +114,7 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
 }
 
 @Composable
-fun HomeContentScreen(
-    viewModel: HomeUiAction,
-    uiState: HomeUiState
-) {
+fun HomeContentScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
     var financesList by remember { mutableStateOf<List<Finance>?>(null) }
     var financeTypeSelected by remember { mutableStateOf<FinanceTypes?>(null) }
     var showDialog by remember { mutableStateOf(false) }
@@ -127,20 +127,31 @@ fun HomeContentScreen(
             showDialog = true
         })
 
-    if (financesList == null || financeTypeSelected == null)
-        return
+    if (financesList == null || financeTypeSelected == null) return
 
-    FinancesDetailDialog(
-        viewModel = viewModel,
-        isVisible = showDialog,
+    FinancesDetailDialog(isVisible = showDialog,
         financesList = financesList!!,
         financeType = financeTypeSelected!!,
         categories = uiState.categories,
-        financeTypes = uiState.financeTypes
-    ) {
-        financesList = null
-        showDialog = false
-    }
+        financeTypes = uiState.financeTypes,
+        onDismiss = {
+            financesList = null
+            showDialog = false
+        },
+        onUpdateFinance = { finance ->
+            financesList = null
+            showDialog = false
+
+            if (finance == null) return@FinancesDetailDialog
+            viewModel.onUpdateFinance(finance = finance)
+        },
+        onDeleteFinance = { finance ->
+            financesList = null
+            showDialog = false
+
+            if (finance == null) return@FinancesDetailDialog
+            viewModel.onDeleteFinance(finance = finance)
+        })
 }
 
 @Composable
@@ -162,7 +173,6 @@ fun FinanceScreen(
     AddFinanceDialog(
         isVisible = showDialog, categories = categories, financeTypes = financeTypes
     ) { finance ->
-        Log.i("HomeScreen", "Finance: $finance")
         showDialog = false
         if (finance != null) viewModel.onCreateFinance(finance = finance)
     }
