@@ -1,0 +1,22 @@
+package com.roswer.domain.module.finances.usecase
+
+import com.roswer.domain.module.finances.models.Finance
+import com.roswer.domain.module.finances.repository.FinanceRepository
+import javax.inject.Inject
+
+class FinanceUseCase @Inject constructor(
+    private val repository: FinanceRepository
+) {
+    suspend fun getFinancesList(): List<Finance> = repository.getFinancesList()
+
+    suspend fun getFinancesListByMonthYear(month: Int, year: Int): List<Finance> =
+        repository.getFinancesListByMonthYear(month, year)
+
+    suspend fun getFinanceById(id: Int): Finance = repository.getFinanceById(id)
+
+    suspend fun updateFinance(finance: Finance): Boolean = repository.updateFinance(finance)
+
+    suspend fun saveFinance(finance: Finance): Boolean = repository.saveFinance(finance)
+
+    suspend fun deleteFinance(finance: Finance): Boolean = repository.deleteFinance(finance)
+}

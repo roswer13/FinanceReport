@@ -1,0 +1,73 @@
+package com.roswer.data.finances.repository
+
+import com.roswer.data.categories.mapper.toDomain
+import com.roswer.data.categories.repository.CategoryLocalDataSource
+import com.roswer.data.categories.repository.FinanceTypesLocalDataSource
+import com.roswer.data.finances.mapper.toDomain
+import com.roswer.data.finances.mapper.toEntity
+import com.roswer.domain.module.finances.models.Finance
+import com.roswer.domain.module.finances.repository.FinanceRepository
+import javax.inject.Inject
+
+class FinanceRepositoryImpl @Inject constructor(
+    private val localDataSource: FinanceLocalDataSource,
+    private val financeTypesLocalDataSource: FinanceTypesLocalDataSource,
+    private val categoryLocalDataSource: CategoryLocalDataSource
+) : FinanceRepository {
+
+    override suspend fun getFinancesList(): List<Finance> {
+        val financesTypes = financeTypesLocalDataSource.getAll().getOrThrow().map { it.toDomain() }
+        val categories = categoryLocalDataSource.getAll().getOrThrow()
+            .map { it.toDomain(financesTypes.find { financesType -> it.financeTypeId == financesType.id }!!) }
+        return localDataSource.getAll().getOrThrow().map {
+            it.toDomain(category = categories.find { category -> category.id == it.categoryId }
+                ?: throw Exception("Category not found"))
+        }
+    }
+
+    override suspend fun getFinancesListByMonthYear(month: Int, year: Int): List<Finance> {
+        val financesTypes = financeTypesLocalDataSource.getAll().getOrThrow().map { it.toDomain() }
+        val categories = categoryLocalDataSource.getAll().getOrThrow()
+            .map { it.toDomain(financesTypes.find { financesType -> it.financeTypeId == financesType.id }!!) }
+        return localDataSource.getByMonthYear(month = month, year = year).getOrThrow().map {
+            it.toDomain(category = categories.find { category -> category.id == it.categoryId }
+                ?: throw Exception("Category not found"))
+        }
+    }
+
+    override suspend fun getFinanceById(id: Int): Finance {
+        val financesTypes = financeTypesLocalDataSource.getAll().getOrThrow().map { it.toDomain() }
+        val categories = categoryLocalDataSource.getAll().getOrThrow()
+            .map { it.toDomain(financesTypes.find { financesType -> it.financeTypeId == financesType.id }!!) }
+        val financeEntity = localDataSource.getById(id = id).getOrThrow()
+        return financeEntity.toDomain(category = categories.find { category -> category.id == financeEntity.categoryId }
+            ?: throw Exception("Category not found"))
+    }
+
+    override suspend fun updateFinance(finance: Finance): Boolean {
+        try {
+            localDataSource.update(finance = finance.toEntity())
+            return true
+        } catch (e: Exception) {
+            return false
+        }
+    }
+
+    override suspend fun saveFinance(finance: Finance): Boolean {
+        try {
+            localDataSource.save(finance = finance.toEntity())
+            return true
+        } catch (e: Exception) {
+            return false
+        }
+    }
+
+    override suspend fun deleteFinance(finance: Finance): Boolean {
+        try {
+            localDataSource.delete(finance = finance.toEntity())
+            return true
+        } catch (e: Exception) {
+            return false
+        }
+    }
+}

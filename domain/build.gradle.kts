@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.domain"
+    namespace = "com.roswer.domain"
     compileSdk = 35
 
     defaultConfig {

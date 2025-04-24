@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "507161535065",
+    "project_id": "cashwise-dev-66978",
+    "storage_bucket": "cashwise-dev-66978.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507161535065:android:56c49734e253380e394748",
+        "android_client_info": {
+          "package_name": "com.roswer.financereport"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4Oyf0zGGAV_P8IPmF9GdwS6jopRUtric"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

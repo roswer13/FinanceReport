@@ -4,14 +4,15 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.gms.google.services)
 }
 
 android {
-    namespace = "com.example.financereport"
+    namespace = "com.roswer.financereport"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.financereport"
+        applicationId = "com.roswer.financereport"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -62,6 +63,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Firebase
+    implementation(platform(libs.firebase.boom))
+    implementation(libs.firebase.analytics)
 
     // compose navigation
     implementation(libs.compose.navigation)
