@@ -30,11 +30,13 @@ import com.roswer.domain.module.categories.model.Category
 import com.roswer.domain.module.categories.model.FinanceTypes
 import com.roswer.domain.module.finances.models.Finance
 import com.roswer.financereport.R
+import com.roswer.financereport.constants.FirebaseConstants
 import com.roswer.financereport.presentation.components.AmountInputField
 import com.roswer.financereport.presentation.components.DatePickerModal
 import com.roswer.financereport.presentation.components.KeyboardKey
 import com.roswer.financereport.presentation.components.NumericKeyboard
 import com.roswer.financereport.presentation.components.PillDropdown
+import com.roswer.financereport.utils.FirebaseAnalyticsUtil
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -76,7 +78,8 @@ fun AddFinanceDialogContent(
 ) {
     val amountValue = finance?.amount?.toString() ?: "0.00"
     val financeTypeValue = finance?.category?.financeType ?: financeTypes.first()
-    val categoryValue = finance?.category ?: categories.first { it.financeType.id == financeTypeValue.id }
+    val categoryValue =
+        finance?.category ?: categories.first { it.financeType.id == financeTypeValue.id }
     val dateLongValue = finance?.date?.time ?: System.currentTimeMillis()
     val commentsValue = finance?.description ?: ""
 
@@ -174,6 +177,8 @@ fun AddFinanceDialogContent(
                             comments.value
                         )
                     )
+                    // Send event to Firebase, this event is used to track the add finance completed.
+                    FirebaseAnalyticsUtil.logEvent(FirebaseConstants.EVENT_ADD_FINANCE_COMPLETED)
                 }
             })
         }

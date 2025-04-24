@@ -29,6 +29,7 @@ import com.roswer.domain.module.categories.model.Category
 import com.roswer.domain.module.categories.model.FinanceTypes
 import com.roswer.domain.module.finances.models.Finance
 import com.roswer.financereport.R
+import com.roswer.financereport.constants.FirebaseConstants
 import com.roswer.financereport.presentation.components.AppTopBar
 import com.roswer.financereport.presentation.components.MonthPicker
 import com.roswer.financereport.presentation.components.YearPicker
@@ -40,6 +41,7 @@ import com.roswer.financereport.presentation.home.viewmodel.HomeUiEvent
 import com.roswer.financereport.presentation.home.viewmodel.HomeUiState
 import com.roswer.financereport.presentation.home.viewmodel.HomeViewModel
 import com.roswer.financereport.presentation.home.viewmodel.MutableHomeUiState
+import com.roswer.financereport.utils.FirebaseAnalyticsUtil
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
@@ -169,6 +171,9 @@ fun FinanceScreen(
             Icon(Icons.Default.Add, contentDescription = "Add Finance")
         }
     }
+
+    // Send event to Firebase, this event is used to track the add finance button.
+    FirebaseAnalyticsUtil.logEvent(FirebaseConstants.EVENT_ADD_FINANCE)
 
     AddFinanceDialog(
         isVisible = showDialog, categories = categories, financeTypes = financeTypes
