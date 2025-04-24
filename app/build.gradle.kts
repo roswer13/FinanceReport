@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.financereport"
+    namespace = "com.roswer.financereport"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.financereport"
+        applicationId = "com.roswer.financereport"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
