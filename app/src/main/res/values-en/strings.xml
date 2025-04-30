@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FinanceReport</string>
+    <string name="app_name">CashWise</string>
 
     <!-- Months -->
     <string name="january">January</string>

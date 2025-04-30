@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">CashWise</string>
+
     <!-- Months -->
     <string name="january">Janeiro</string>
     <string name="february">Fevereiro</string>
