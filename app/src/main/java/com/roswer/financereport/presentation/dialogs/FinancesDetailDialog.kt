@@ -1,5 +1,6 @@
 package com.roswer.financereport.presentation.dialogs
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,7 +39,6 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FinancesDetailDialog(
@@ -69,6 +69,7 @@ fun FinancesDetailDialog(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FinancesDetailContent(
     financesList: List<Finance>,
@@ -83,6 +84,8 @@ fun FinancesDetailContent(
     var selectedFinance by remember { mutableStateOf<Finance?>(null) }
     var showDialog by remember { mutableStateOf(false) }
 
+    val financesGroupDate = financesToFinancesGroupDate(financesList)
+
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -96,53 +99,68 @@ fun FinancesDetailContent(
             style = MaterialTheme.typography.titleMedium
         )
         LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            items(financesList.size) { index ->
-                val finance = financesList[index]
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            selectedFinance = finance
-                            showDialog = true
-                        }, verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CircleIcon(
-                        color = Color(finance.category.color.toColorInt()),
-                        icon = finance.category.icon
+            financesGroupDate.forEach { financeGroup ->
+                stickyHeader {
+                    Text(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        text = financeGroup.key,
+                        style = MaterialTheme.typography.titleMedium
                     )
+                }
+                items(financeGroup.value.size) { index ->
+                    val finance = financesList[index]
 
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(horizontal = 6.dp)
-                        ) {
-                            TextFontWeight(
-                                text = finance.category.name, fontWeight = FontWeight.Bold
-                            )
-                            if (finance.description != null && finance.description!!.isNotEmpty()) {
-                                Text(text = finance.description!!)
-                            }
-                        }
-                        Column(
-                            modifier = Modifier.fillMaxHeight(), horizontalAlignment = Alignment.End
-                        ) {
-                            TextFontWeight(
-                                modifier = Modifier.fillMaxHeight(),
-                                text = currencyInstance.format(finance.amount),
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(text = dateFormat.format(finance.date))
-                        }
-                        Icon(
-                            modifier = Modifier.padding(start = 12.dp).clickable {
-                                onDeleteFinance(finance)
-                            },
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "",
-                            tint = Color.LightGray
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                selectedFinance = finance
+                                showDialog = true
+                            }, verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CircleIcon(
+                            color = Color(finance.category.color.toColorInt()),
+                            icon = finance.category.icon
                         )
+
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(horizontal = 6.dp)
+                            ) {
+                                TextFontWeight(
+                                    text = finance.category.name, fontWeight = FontWeight.Bold
+                                )
+                                if (finance.description != null && finance.description!!.isNotEmpty()) {
+                                    Text(text = finance.description!!)
+                                }
+                            }
+                            Column(
+                                modifier = Modifier.fillMaxHeight(),
+                                horizontalAlignment = Alignment.End
+                            ) {
+                                TextFontWeight(
+                                    modifier = Modifier.fillMaxHeight(),
+                                    text = currencyInstance.format(finance.amount),
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(text = dateFormat.format(finance.date))
+                            }
+                            Icon(
+                                modifier = Modifier
+                                    .padding(start = 12.dp)
+                                    .clickable {
+                                        onDeleteFinance(finance)
+                                    },
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "",
+                                tint = Color.LightGray
+                            )
+                        }
                     }
                 }
             }
@@ -161,6 +179,14 @@ fun FinancesDetailContent(
         if (financeResult == null) return@AddFinanceDialog
         onUpdateFinance(financeResult)
     }
+}
+
+/**
+ * Group finances by date and format the date to "EEEE, d".
+ */
+fun financesToFinancesGroupDate(finances: List<Finance>): Map<String, List<Finance>> {
+    val dateFormatter = SimpleDateFormat("EEEE, d", Locale.getDefault())
+    return finances.groupBy { dateFormatter.format(it.date) }.toSortedMap(compareByDescending { it })
 }
 
 @Preview(
