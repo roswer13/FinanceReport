@@ -19,4 +19,6 @@
     <string name="add_comment">Ajoutez un commentaire…</string>
     <string name="saving">Épargne</string>
     <string name="available_saving">Épargne disponible</string>
+    <string name="skip">Passer</string>
+    <string name="next">Suivant</string>
 </resources>

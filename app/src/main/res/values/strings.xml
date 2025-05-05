@@ -18,4 +18,6 @@
     <string name="add_comment">Añade comentario…</string>
     <string name="saving">Ahorro</string>
     <string name="available_saving">Ahorro disponible</string>
+    <string name="skip">Saltar</string>
+    <string name="next">Siguiente</string>
 </resources>
