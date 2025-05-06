@@ -114,7 +114,7 @@ fun AddFinanceDialogContent(
             PillDropdown(items = categories.filter { it.financeType.id == financeType.value.id }
                 .map { it.name }, selectedItem = category.value.name, onItemSelected = { name ->
                 category.value = categories.find { it.name == name } ?: categories.first()
-            }, icon = category.value.icon, backgroundColor = category.value.color
+            }, emojiIcon = category.value.emojiIcon, backgroundColor = category.value.color
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

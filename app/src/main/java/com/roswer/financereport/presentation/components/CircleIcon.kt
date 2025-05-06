@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,11 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import com.roswer.financereport.R
 
 @Composable
-fun CircleIcon(color: Color, icon: Int) {
+fun CircleIcon(color: Color, icon: Int = 0, emojiIcon: String = "") {
     Box(
         modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center
     ) {
@@ -27,12 +29,17 @@ fun CircleIcon(color: Color, icon: Int) {
                     color = color, shape = CircleShape
                 )
         )
-        Icon(
-            painter = painterResource(id = icon),
-            contentDescription = null,
-            modifier = Modifier.size(18.dp),
-            tint = Color.DarkGray
-        )
+        if (emojiIcon.isNotEmpty()) {
+            Text(text = emojiIcon, fontSize = 18.sp)
+        }
+        if (icon != 0) {
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = null,
+                modifier = Modifier.size(18.dp),
+                tint = Color.DarkGray
+            )
+        }
     }
 }
 
@@ -41,5 +48,13 @@ fun CircleIcon(color: Color, icon: Int) {
 fun CircleIconPreview() {
     CircleIcon(
         color = Color("#FFC107".toColorInt()), icon = R.drawable.calendar
+    )
+}
+
+@Preview
+@Composable
+fun CircleEmojiIconPreview() {
+    CircleIcon(
+        color = Color("#FFC107".toColorInt()), emojiIcon = "💵"
     )
 }

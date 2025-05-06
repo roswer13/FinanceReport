@@ -23,6 +23,15 @@ class Finance(
             creationDate = Date()
         )
 
+        fun buildIncomeByDateFake(date: Date) = Finance(
+            id = 1,
+            date = date,
+            amount = Random.nextDouble(10.0, 100.0),
+            category = Category.buildIncomeFake(),
+            description = generateRandomParagraph(wordCount = 8, allowEmpty = true),
+            creationDate = date
+        )
+
         fun buildSavingFake() = Finance(
             id = 1,
             date = Date(),

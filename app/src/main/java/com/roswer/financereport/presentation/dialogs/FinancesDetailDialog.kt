@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -16,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
@@ -37,6 +40,7 @@ import com.roswer.financereport.presentation.components.CircleIcon
 import com.roswer.financereport.presentation.components.TextFontWeight
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,8 +88,6 @@ fun FinancesDetailContent(
     var selectedFinance by remember { mutableStateOf<Finance?>(null) }
     var showDialog by remember { mutableStateOf(false) }
 
-    val financesGroupDate = financesToFinancesGroupDate(financesList)
-
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -96,70 +98,77 @@ fun FinancesDetailContent(
                 .padding(bottom = 12.dp)
                 .align(Alignment.CenterHorizontally),
             text = financeType.name,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleLarge
         )
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        if (financesList.isEmpty()) {
+            Text(
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp, bottom = 16.dp, top = 6.dp)
+                    .fillMaxWidth(),
+                text = "No finances found",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        } else {
+            val financesGroupDate = financesToFinancesGroupDate(financesList)
 
-            financesGroupDate.forEach { financeGroup ->
-                stickyHeader {
-                    Text(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth(),
-                        text = financeGroup.key,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
-                items(financeGroup.value.size) { index ->
-                    val finance = financesList[index]
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                selectedFinance = finance
-                                showDialog = true
-                            }, verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        CircleIcon(
-                            color = Color(finance.category.color.toColorInt()),
-                            icon = finance.category.icon
-                        )
-
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            Column(
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                financesGroupDate.forEach { (date, financesItems) ->
+                    stickyHeader {
+                        Surface(color = MaterialTheme.colorScheme.background) {
+                            Text(
                                 modifier = Modifier
-                                    .weight(1f)
-                                    .padding(horizontal = 6.dp)
-                            ) {
-                                TextFontWeight(
-                                    text = finance.category.name, fontWeight = FontWeight.Bold
-                                )
-                                if (finance.description != null && finance.description!!.isNotEmpty()) {
-                                    Text(text = finance.description!!)
+                                    .padding(8.dp)
+                                    .fillMaxWidth(),
+                                text = date,
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                    }
+
+                    items(financesItems) { finance ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    selectedFinance = finance
+                                    showDialog = true
+                                }, verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CircleIcon(
+                                color = Color(finance.category.color.toColorInt()),
+                                emojiIcon = finance.category.emojiIcon
+                            )
+
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                Column(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(horizontal = 6.dp)
+                                ) {
+                                    TextFontWeight(
+                                        text = finance.category.name, fontWeight = FontWeight.Bold
+                                    )
+                                    if (finance.description != null && finance.description!!.isNotEmpty()) {
+                                        Text(text = finance.description!!)
+                                    }
                                 }
-                            }
-                            Column(
-                                modifier = Modifier.fillMaxHeight(),
-                                horizontalAlignment = Alignment.End
-                            ) {
                                 TextFontWeight(
                                     modifier = Modifier.fillMaxHeight(),
                                     text = currencyInstance.format(finance.amount),
                                     fontWeight = FontWeight.Bold
                                 )
-                                Text(text = dateFormat.format(finance.date))
+                                Icon(
+                                    modifier = Modifier
+                                        .padding(start = 12.dp)
+                                        .clickable {
+                                            onDeleteFinance(finance)
+                                        },
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "",
+                                    tint = Color.LightGray
+                                )
                             }
-                            Icon(
-                                modifier = Modifier
-                                    .padding(start = 12.dp)
-                                    .clickable {
-                                        onDeleteFinance(finance)
-                                    },
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "",
-                                tint = Color.LightGray
-                            )
                         }
                     }
                 }
@@ -186,7 +195,7 @@ fun FinancesDetailContent(
  */
 fun financesToFinancesGroupDate(finances: List<Finance>): Map<String, List<Finance>> {
     val dateFormatter = SimpleDateFormat("EEEE, d", Locale.getDefault())
-    return finances.groupBy { dateFormatter.format(it.date) }.toSortedMap(compareByDescending { it })
+    return finances.groupBy { dateFormatter.format(it.date) }
 }
 
 @Preview(
@@ -194,11 +203,15 @@ fun financesToFinancesGroupDate(finances: List<Finance>): Map<String, List<Finan
 )
 @Composable
 fun FinancesDetailContentPreview() {
+    val yesterdayDate = Date(System.currentTimeMillis() - 86400000 * 2)
     val financeType = FinanceTypes.buildIncomeFake()
     val financesList = listOf(
         Finance.buildIncomeFake(),
-        Finance.buildIncomeFake(),
-        Finance.buildIncomeFake(),
+        Finance.buildSavingFake(),
+        Finance.buildExpenseFake(),
+        // Finance before yesterday
+        Finance.buildIncomeByDateFake(date = yesterdayDate),
+        Finance.buildIncomeByDateFake(date = yesterdayDate),
     )
     val categories = listOf(
         Category.buildSavingFake(),

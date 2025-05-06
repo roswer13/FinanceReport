@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,7 +39,7 @@ fun PillDropdown(
     items: List<String>,
     selectedItem: String,
     onItemSelected: (String) -> Unit,
-    icon: Int? = null,
+    emojiIcon: String? = null,
     backgroundColor: String? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -57,14 +58,11 @@ fun PillDropdown(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                if (icon != null) {
-                    Icon(
-                        painter = painterResource(id = icon),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
-                            .size(25.dp),
-                        tint = Color.DarkGray
+                if (emojiIcon != null) {
+                    Text(
+                        text = emojiIcon,
+                        fontSize = 18.sp,
+                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 2.dp)
                     )
                 } else {
                     Box(
@@ -114,7 +112,7 @@ fun PillDropdownPreview() {
         items = listOf("Item 1", "Item 2", "Item 3"),
         selectedItem = "Item 1",
         onItemSelected = {},
-        icon = com.roswer.domain.R.drawable.icon_test
+        emojiIcon = "💵"
     )
 }
 

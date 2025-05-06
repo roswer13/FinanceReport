@@ -9,6 +9,7 @@ class FinanceTypeEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "icon") val icon: Int,
+    @ColumnInfo(name = "emojiIcon") val emojiIcon: String,
     @ColumnInfo(name = "color") val color: String,
     @ColumnInfo(name = "type") val type: Int
 )

@@ -11,7 +11,12 @@ import com.roswer.domain.module.categories.model.FinanceTypesEnum
  * @return FinanceTypeEntity The converted entity object.
  */
 fun FinanceTypes.toEntity() = FinanceTypeEntity(
-    id = this.id, name = this.name, icon = this.icon, color = this.color, type = this.type.ordinal
+    id = this.id,
+    name = this.name,
+    icon = this.icon,
+    emojiIcon = this.emojiIcon,
+    color = this.color,
+    type = this.type.ordinal
 )
 
 /**
@@ -21,5 +26,12 @@ fun FinanceTypes.toEntity() = FinanceTypeEntity(
  * @return FinanceTypes The converted domain model object.
  */
 fun FinanceTypeEntity.toDomain(): FinanceTypes {
-    return FinanceTypes(id = id, name = name, icon = icon, color = color, type = FinanceTypesEnum.entries[type])
+    return FinanceTypes(
+        id = id,
+        name = name,
+        icon = icon,
+        emojiIcon = emojiIcon,
+        color = color,
+        type = FinanceTypesEnum.entries[type]
+    )
 }

@@ -36,6 +36,7 @@ class FinanceTypesRepositoryImpl @Inject constructor(
                 id = incomeId,
                 name = resources.getString(R.string.income),
                 icon = R.drawable.income,
+                emojiIcon = "💵",
                 color = getColorHex(context, R.color.green),
                 type = FinanceTypesEnum.INCOME
             )
@@ -45,6 +46,7 @@ class FinanceTypesRepositoryImpl @Inject constructor(
                 id = expenseId,
                 name = resources.getString(R.string.expense),
                 icon = R.drawable.expense,
+                emojiIcon = "💸",
                 color = getColorHex(context, R.color.lavender),
                 type = FinanceTypesEnum.EXPENSE
             )
@@ -54,6 +56,7 @@ class FinanceTypesRepositoryImpl @Inject constructor(
                 id = savingId,
                 name = resources.getString(R.string.saving),
                 icon = R.drawable.savings,
+                emojiIcon = "💰",
                 color = getColorHex(context, R.color.blue),
                 type = FinanceTypesEnum.SAVING
             )
