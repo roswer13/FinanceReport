@@ -21,4 +21,8 @@
     <string name="available_saving">Economia disponível</string>
     <string name="skip">Pular</string>
     <string name="next">Próximo</string>
+    <string name="done">Feito</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete">Excluir</string>
+    <string name="delete_confirmation">Tem certeza de que deseja excluí-lo?</string>
 </resources>

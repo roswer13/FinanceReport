@@ -66,6 +66,7 @@ class CategoryRepositoryImplTest {
                 id = it.id,
                 name = it.name,
                 icon = it.icon,
+                emojiIcon = it.emojiIcon,
                 color = it.color,
                 type = it.type.ordinal
             )
@@ -73,9 +74,19 @@ class CategoryRepositoryImplTest {
 
         val categoryEntities = listOf(
             CategoryEntity(
-                id = 1, icon = 123, name = "Category 1", color = "#FFFFFF", financeTypeId = 1
+                id = 1,
+                icon = 123,
+                name = "Category 1",
+                color = "#FFFFFF",
+                emojiIcon = "⚗️",
+                financeTypeId = 1
             ), CategoryEntity(
-                id = 2, icon = 124, name = "Category 2", color = "#FFFFFF", financeTypeId = 2
+                id = 2,
+                icon = 124,
+                name = "Category 2",
+                color = "#FFFFFF",
+                emojiIcon = "⚗️",
+                financeTypeId = 2
             )
         )
 

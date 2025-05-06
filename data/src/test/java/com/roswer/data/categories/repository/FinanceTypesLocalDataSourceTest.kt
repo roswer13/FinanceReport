@@ -25,8 +25,22 @@ class FinanceTypesLocalDataSourceTest {
     @Test
     fun `getAll should return list of finance types`() = runBlocking {
         val financeTypes = listOf(
-            FinanceTypeEntity(id = 1, name = "Income", icon = 1, color = "#FFFFFF", type = 1),
-            FinanceTypeEntity(id = 2, name = "Expense", icon = 2, color = "#FFFFFF", type = 2)
+            FinanceTypeEntity(
+                id = 1,
+                name = "Income",
+                icon = 1,
+                color = "#FFFFFF",
+                emojiIcon = "⚗️",
+                type = 1
+            ),
+            FinanceTypeEntity(
+                id = 2,
+                name = "Expense",
+                icon = 2,
+                color = "#FFFFFF",
+                emojiIcon = "⚗️",
+                type = 2
+            )
         )
         coEvery { financeTypeDao.getAll() } returns financeTypes
 
@@ -55,7 +69,7 @@ class FinanceTypesLocalDataSourceTest {
     fun `insertOrUpdate should return success when operation is successful`() = runBlocking {
         val financeTypes = listOf(
             FinanceTypeEntity(
-                id = 1, name = "Income", icon = 1, color = "#FFFFFF", type = 1
+                id = 1, name = "Income", icon = 1, color = "#FFFFFF", emojiIcon = "⚗️", type = 1
             )
         )
         coEvery { financeTypeDao.insertOrUpdate(financeTypes) } returns Unit
@@ -74,6 +88,7 @@ class FinanceTypesLocalDataSourceTest {
                     name = "Income",
                     icon = 1,
                     color = "#FFFFFF",
+                    emojiIcon = "⚗️",
                     type = 1
                 )
             )
