@@ -33,4 +33,12 @@
     <string name="cryptocurrencies">Criptomonedas</string>
     <string name="stock_exchange">Bolsa</string>
     <string name="savings">Ahorros</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">Controla tus gastos fácilmente</string>
+    <string name="onboarding_description_1">Registra tus ingresos y gastos en segundos. No más hojas de cálculo ni apps complicadas. CashWise lo hace todo fácil y rápido.</string>
+    <string name="onboarding_title_2">Visualiza y entiende tus finanzas</string>
+    <string name="onboarding_description_2">Ve a dónde va tu dinero con gráficos claros. Clasifica tus gastos y comprende tus hábitos financieros al instante.</string>
+    <string name="onboarding_title_3">Alcanza tus metas de ahorro</string>
+    <string name="onboarding_description_3">CashWise te ayuda a tomar decisiones inteligentes y a mantener el rumbo hacia tus metas financieras. ¡Haz que tu dinero trabaje para ti!</string>
 </resources>

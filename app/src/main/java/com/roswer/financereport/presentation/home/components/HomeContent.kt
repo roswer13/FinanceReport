@@ -113,7 +113,7 @@ fun HomeContent(
                     ) {
                         CircleIcon(
                             color = Color(financeType.color.toColorInt()),
-                            icon = financeType.icon
+                            emojiIcon = financeType.emojiIcon
                         )
                         Column {
                             Text(text = financeType.name)

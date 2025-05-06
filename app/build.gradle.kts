@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.foundation.pager)
     implementation(libs.androidx.animation)
+    implementation(libs.core.splashscreen)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -19,4 +19,6 @@
     <string name="add_comment">Adicione comentário…</string>
     <string name="saving">Economia</string>
     <string name="available_saving">Economia disponível</string>
+    <string name="skip">Pular</string>
+    <string name="next">Próximo</string>
 </resources>

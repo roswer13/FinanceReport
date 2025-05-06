@@ -17,7 +17,7 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:exported="true"
-            android:theme="@style/Theme.FinanceReport">
+            android:theme="@style/Theme.FinanceReport.StartingScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

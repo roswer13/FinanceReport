@@ -19,4 +19,6 @@
     <string name="add_comment">Add comment…</string>
     <string name="saving">Saving</string>
     <string name="available_saving">Available saving</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
 </resources>

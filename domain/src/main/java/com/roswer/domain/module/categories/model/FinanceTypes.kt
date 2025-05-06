@@ -7,6 +7,7 @@ data class FinanceTypes(
     val id: Int = 0,
     val name: String,
     val icon: Int,
+    val emojiIcon: String = "",
     val color: String = "#000000",
     val type: FinanceTypesEnum
 ) {
@@ -15,20 +16,25 @@ data class FinanceTypes(
             id = 1,
             name = "Income",
             icon = R.drawable.icon_test,
+            emojiIcon = "💵",
             color = ColorUtils.generateRandomColorHex(),
             type = FinanceTypesEnum.INCOME
         )
+
         fun buildSavingFake() = FinanceTypes(
             id = 2,
             name = "Saving",
             icon = R.drawable.icon_test,
+            emojiIcon = "💰",
             color = ColorUtils.generateRandomColorHex(),
             type = FinanceTypesEnum.SAVING
         )
+
         fun buildExpenseFake() = FinanceTypes(
             id = 2,
             name = "Expense",
             icon = R.drawable.icon_test,
+            emojiIcon = "💸",
             color = ColorUtils.generateRandomColorHex(),
             type = FinanceTypesEnum.EXPENSE
         )

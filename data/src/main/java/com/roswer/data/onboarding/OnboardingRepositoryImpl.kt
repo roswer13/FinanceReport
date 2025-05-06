@@ -15,26 +15,23 @@ class OnboardingRepositoryImpl @Inject constructor(
         return listOf(
             Onboarding(
                 id = 1,
-                title = resources.getString(R.string.app_name),
-                description = "1. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                title = resources.getString(R.string.onboarding_title_1),
+                description = resources.getString(R.string.onboarding_description_1),
+                icon = "💳",
                 uri = "https://fakeimg.pl/250",
             ),
             Onboarding(
                 id = 2,
-                title = resources.getString(R.string.app_name),
-                description = "2. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                title = resources.getString(R.string.onboarding_title_2),
+                description = resources.getString(R.string.onboarding_description_2),
+                icon = "📊",
                 uri = "https://fakeimg.pl/250",
             ),
             Onboarding(
                 id = 3,
-                title = resources.getString(R.string.app_name),
-                description = "3. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                uri = "https://fakeimg.pl/250",
-            ),
-            Onboarding(
-                id = 4,
-                title = resources.getString(R.string.app_name),
-                description = "4. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                title = resources.getString(R.string.onboarding_title_3),
+                description = resources.getString(R.string.onboarding_description_3),
+                icon = "💰",
                 uri = "https://fakeimg.pl/250",
             ),
         )

@@ -33,4 +33,12 @@
     <string name="cryptocurrencies">Cryptocurrencies</string>
     <string name="stock_exchange">Stock Exchange</string>
     <string name="savings">Savings</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">Easily track your expenses</string>
+    <string name="onboarding_description_1">Log your income and expenses in seconds. No more spreadsheets or complicated apps. CashWise makes everything simple and fast.</string>
+    <string name="onboarding_title_2">Visualize and understand your finances</string>
+    <string name="onboarding_description_2">See where your money goes with clear charts. Categorize your expenses and understand your financial habits instantly.</string>
+    <string name="onboarding_title_3">Reach your savings goals</string>
+    <string name="onboarding_description_3">CashWise helps you make smart decisions and stay on track toward your financial goals. Make your money work for you!</string>
 </resources>

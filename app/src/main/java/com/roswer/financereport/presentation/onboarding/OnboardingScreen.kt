@@ -1,37 +1,29 @@
 package com.roswer.financereport.presentation.onboarding
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.roswer.financereport.R
 import com.roswer.financereport.navigation.Navigation
+import com.roswer.financereport.presentation.onboarding.components.ButtonText
+import com.roswer.financereport.presentation.onboarding.components.Dot
+import com.roswer.financereport.presentation.onboarding.components.OnboardingItem
 import com.roswer.financereport.presentation.onboarding.viewmodel.MutableOnboardingUiState
 import com.roswer.financereport.presentation.onboarding.viewmodel.OnboardingUiAction
 import com.roswer.financereport.presentation.onboarding.viewmodel.OnboardingUiEvent
@@ -77,7 +69,7 @@ fun OnboardingScreen(viewModel: OnboardingUiAction, uiState: OnboardingUiState) 
                     .weight(1f)
                     .fillMaxWidth()
             ) { page ->
-                OnboardingItem(onboarding[page])
+                OnboardingItem(onboarding[page], currentPage = pagerState.currentPage, page = page)
             }
 
             Row(
@@ -88,56 +80,37 @@ fun OnboardingScreen(viewModel: OnboardingUiAction, uiState: OnboardingUiState) 
                     .padding(10.dp)
             ) {
 
-                Text("Skip", style = TextStyle(
-                    color = Color(0xFFAAAAAA),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
-                ), modifier = Modifier.clickable {
-                    val skipPage = pagerState.pageCount - 1
-                    coroutineScope.launch { pagerState.animateScrollToPage(skipPage) }
-                })
+                ButtonText(
+                    text = stringResource(id = R.string.skip),
+                    onClick = {
+                        val skipPage = pagerState.pageCount - 1
+                        coroutineScope.launch { pagerState.animateScrollToPage(skipPage) }
+                    }
+                )
 
                 Row(
                     horizontalArrangement = Arrangement.Center, modifier = Modifier.weight(1f)
                 ) {
                     repeat(onboarding.size) { index ->
-                        val isSelected = pagerState.currentPage == index
-                        Box(
-                            modifier = Modifier
-                                .padding(4.dp)
-                                .width(if (isSelected) 18.dp else 8.dp)
-                                .height(if (isSelected) 8.dp else 8.dp)
-                                .border(
-                                    width = 1.dp,
-                                    color = Color(0xFF707784),
-                                    shape = RoundedCornerShape(10.dp)
-                                )
-                                .background(
-                                    color = if (isSelected) Color(0xFF3B6C64) else Color(0xFFFFFFFF),
-                                    shape = CircleShape
-                                )
-                        )
+                        Dot(isSelected = pagerState.currentPage == index)
                     }
                 }
-
-                Text("Next", style = TextStyle(
-                    color = Color(0xFF333333),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
-                ), modifier = Modifier.clickable {
-                    val currentPage = pagerState.currentPage
-                    if (currentPage < onboarding.size - 1) {
-                        val nextPage = pagerState.currentPage + 1
-                        coroutineScope.launch { pagerState.animateScrollToPage(nextPage) }
+                ButtonText(
+                    text = stringResource(id = R.string.next),
+                    onClick = {
+                        val currentPage = pagerState.currentPage
+                        if (currentPage < onboarding.size - 1) {
+                            val nextPage = pagerState.currentPage + 1
+                            coroutineScope.launch { pagerState.animateScrollToPage(nextPage) }
+                        }
+                        if (currentPage == onboarding.size - 1) {
+                            viewModel.onOnboardingCompleted()
+                        }
                     }
-                    if (currentPage == onboarding.size - 1) {
-                        viewModel.onOnboardingCompleted()
-                    }
-                })
+                )
             }
         }
     }
-
 }
 
 @Preview
