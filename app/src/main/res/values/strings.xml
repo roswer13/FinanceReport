@@ -20,4 +20,8 @@
     <string name="available_saving">Ahorro disponible</string>
     <string name="skip">Saltar</string>
     <string name="next">Siguiente</string>
+    <string name="done">Hecho</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete">Eliminar</string>
+    <string name="delete_confirmation">¿Estás seguro de que deseas eliminarlo?</string>
 </resources>

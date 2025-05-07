@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,8 +37,12 @@ import androidx.core.graphics.toColorInt
 import com.roswer.domain.module.categories.model.Category
 import com.roswer.domain.module.categories.model.FinanceTypes
 import com.roswer.domain.module.finances.models.Finance
+import com.roswer.financereport.R
+import com.roswer.financereport.constants.FirebaseConstants
+import com.roswer.financereport.presentation.components.AlertInformationDialog
 import com.roswer.financereport.presentation.components.CircleIcon
 import com.roswer.financereport.presentation.components.TextFontWeight
+import com.roswer.financereport.utils.FirebaseAnalyticsUtil
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -84,9 +89,9 @@ fun FinancesDetailContent(
     onDeleteFinance: (Finance?) -> Unit
 ) {
     val currencyInstance = NumberFormat.getCurrencyInstance(Locale.getDefault())
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     var selectedFinance by remember { mutableStateOf<Finance?>(null) }
     var showDialog by remember { mutableStateOf(false) }
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -162,7 +167,8 @@ fun FinancesDetailContent(
                                     modifier = Modifier
                                         .padding(start = 12.dp)
                                         .clickable {
-                                            onDeleteFinance(finance)
+                                            selectedFinance = finance
+                                            showDeleteConfirmation = true
                                         },
                                     imageVector = Icons.Default.Delete,
                                     contentDescription = "",
@@ -187,6 +193,18 @@ fun FinancesDetailContent(
 
         if (financeResult == null) return@AddFinanceDialog
         onUpdateFinance(financeResult)
+    }
+
+    if (showDeleteConfirmation){
+        AlertInformationDialog(
+            title = "${stringResource(R.string.delete)}: ${selectedFinance?.category?.name}",
+            message = stringResource(R.string.delete_confirmation),
+            onDismiss = { showDeleteConfirmation = false },
+            onConfirm = {
+                onDeleteFinance(selectedFinance)
+                showDeleteConfirmation = false
+            }
+        )
     }
 }
 
